@@ -1,0 +1,103 @@
+import React, { useState } from 'react'
+import ImagePujasera from "../assets/image/pujasera.png"
+import InputDropdown from './InputDropdown'
+import IconProfile from "../assets/image/mdi_user.png"
+import ButtonBasic from './ButtonBasic'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../redux/auth'
+import {
+    ShoppingCartOutlined,
+    UserOutlined
+} from '@ant-design/icons';
+import { Drawer, Button, Form, Input } from 'antd';
+import { cartActions } from '../redux/cart'
+
+
+export default function Navbar() {
+
+    const dispatch = useDispatch();
+
+    const logoutClick = () => {
+        dispatch(authActions.logout());
+    }
+
+    const [open, setOpen] = useState(false);
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
+
+    const [customerData, setCustomerData] = useState({
+        customer : "",
+        meja : ""
+    });
+
+    const onFinish = (values) => {
+        dispatch(cartActions.addCustomer(values));
+    };
+
+    const onChange = (event) => {
+        setCustomerData({
+            ...customerData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const username = useSelector((state) => state.auth.username)
+
+    return (
+        <>
+            <div className='flex justify-between border h-[80px] shadow-lg shadow-slate-200 sticky'>
+                <div className='flex justify-between w-full items-center mx-10'>
+                    <img src={ImagePujasera} alt="image-pujasera" className='w-[200px]' />
+                    <div>
+                        <div className='flex gap-5 items-center'>
+                            <ShoppingCartOutlined onClick={showDrawer} />
+                            <div className='flex gap-2'>
+                                <p>{username}</p>
+                                <UserOutlined />
+                            </div>
+                            <ButtonBasic title={"Logout"} onClick={logoutClick} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Drawer title="Input Customer Data" onClose={onClose} open={open}>
+                <Form
+                    name="basic"
+                    onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        label="Customer"
+                        name="customer"
+                    >
+                        <Input onChange={onChange} value={customerData.customer}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Meja"
+                        name="meja"
+                    >
+                        <Input onChange={onChange} value={customerData.meja}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{
+                            offset: 8,
+                            span: 16,
+                        }}
+                    >
+                        <Button type="primary" htmlType="submit" className='bg-primary'>
+                            Get Table
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Drawer>
+        </>
+
+    )
+}
