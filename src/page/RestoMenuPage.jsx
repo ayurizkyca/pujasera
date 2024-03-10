@@ -6,7 +6,6 @@ import { Typography } from 'antd'
 
 const RestoMenuPage = () => {
     const { id } = useParams();
-    console.log(id);
     const resto = restoData.find((r) => r.id === id);
 
     return (

@@ -4,14 +4,25 @@ const { Meta } = Card;
 import ButtonBasic from './ButtonBasic';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux/cart';
+import { restoData } from '../../public/data/restoData';
 
-const CardMenu = ({ id, name, description, imageUrl, price , idResto, namaResto }) => {
+const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }) => {
   const dispatch = useDispatch();
 
   const addToCartHandler = () => {
-    dispatch(cartActions.addMenuToCart({id, name, price, idResto, namaResto}));
-    console.log({id, name, price});
-  }
+    dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, nameMenu: name, harga: price, qty: 1 }));
+  };
+
+  const resto = restoData.find(r => r.menus.find(m => m.id === id));
+  idResto = resto.id;
+  namaResto = resto.title;
+
+
+  // const findRestoByMenuId = (menuId) => {
+  //   const menu = dataResto.find(r => r.menu.find(m => m.id === menuId));
+  //   console.log(menu);
+  //   return menu ? menu.name : "";
+  // }
 
   return (
     <div>
@@ -24,10 +35,10 @@ const CardMenu = ({ id, name, description, imageUrl, price , idResto, namaResto 
       >
         <Meta title={name} description={description} />
         <Typography.Title level={4} className='mt-5 font-bold text-end '>{price}</Typography.Title>
-        <ButtonBasic title={"add to cart"} onClick={addToCartHandler}/>
+        <ButtonBasic title={"add to cart"} onClick={addToCartHandler} />
       </Card>
     </div>
   )
 }
 
-export default CardMenu
+export default CardMenu;
