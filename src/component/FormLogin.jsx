@@ -23,7 +23,10 @@ const Auth = () => {
         if (user) {
             message.success("Welcome Back!")
             dispatch(authActions.login(user));
-            navigate(ROUTES.HOME);
+            setTimeout(() => {
+                navigate(ROUTES.HOME);
+            }, 500)
+            
         } else {
             message.error("Invalid Username or Password");
         }
