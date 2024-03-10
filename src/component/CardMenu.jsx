@@ -10,7 +10,8 @@ const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }
   const dispatch = useDispatch();
 
   const addToCartHandler = () => {
-    dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, nameMenu: name, harga: price, qty: 1 }));
+    dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
+    console.log(namaResto);
   };
 
   const resto = restoData.find(r => r.menus.find(m => m.id === id));
