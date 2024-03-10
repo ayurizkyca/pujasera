@@ -2,21 +2,9 @@ import React from 'react';
 import { Card, Typography } from 'antd';
 const { Meta } = Card;
 import ButtonBasic from './ButtonBasic';
-import { useDispatch } from 'react-redux';
-import { cartActions } from '../redux/cart';
-import { restoData } from '../../public/data/restoData';
 
-const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }) => {
-  const dispatch = useDispatch();
-
-  const addToCartHandler = () => {
-    dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
-  };
-
-  const resto = restoData.find(r => r.menus.find(m => m.id === id));
-  idResto = resto.id;
-  namaResto = resto.title;
-
+const CardMenu = ({ name, description, imageUrl, price, onClick }) => {
+ 
   return (
     <div className=''>
       <Card
@@ -31,7 +19,7 @@ const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }
             <Meta title={name} description={<div className="line-clamp-2">{description}</div>}  />
             <Typography.Title level={4} className='mt-5 font-bold text-end '>Rp. {price}</Typography.Title>
           </div>
-          <ButtonBasic title={"add to cart"} onClick={addToCartHandler} />
+          <ButtonBasic title={"add to cart"} onClick={onClick} />
         </div>
       </Card>
     </div>
