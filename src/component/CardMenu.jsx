@@ -11,19 +11,11 @@ const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }
 
   const addToCartHandler = () => {
     dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
-    console.log(namaResto);
   };
 
   const resto = restoData.find(r => r.menus.find(m => m.id === id));
   idResto = resto.id;
   namaResto = resto.title;
-
-
-  // const findRestoByMenuId = (menuId) => {
-  //   const menu = dataResto.find(r => r.menu.find(m => m.id === menuId));
-  //   console.log(menu);
-  //   return menu ? menu.name : "";
-  // }
 
   return (
     <div className=''>

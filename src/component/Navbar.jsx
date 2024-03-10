@@ -9,7 +9,7 @@ import {
     ShoppingCartOutlined,
     UserOutlined
 } from '@ant-design/icons';
-import { Drawer, Button, Form, Input } from 'antd';
+import { Drawer, Button, Form, Input, Badge } from 'antd';
 import { cartActions } from '../redux/cart'
 
 
@@ -30,8 +30,8 @@ export default function Navbar() {
     };
 
     const [customerData, setCustomerData] = useState({
-        customer : "",
-        meja : ""
+        customer: "",
+        meja: ""
     });
 
     const onFinish = (values) => {
@@ -44,8 +44,12 @@ export default function Navbar() {
             [event.target.name]: event.target.value,
         });
     };
+    
 
-    const username = useSelector((state) => state.auth.username)
+    const username = useSelector((state) => state.auth.username);
+
+    const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
+
 
     return (
         <>
@@ -54,7 +58,9 @@ export default function Navbar() {
                     <img src={ImagePujasera} alt="image-pujasera" className='w-[200px]' />
                     <div>
                         <div className='flex gap-5 items-center'>
-                            <ShoppingCartOutlined onClick={showDrawer} />
+                            <Badge className='' count = {cartItemCount}>
+                                <ShoppingCartOutlined className='w-5' onClick={showDrawer} />
+                            </Badge>
                             <div className='flex gap-2'>
                                 <p>{username}</p>
                                 <UserOutlined />
@@ -75,14 +81,14 @@ export default function Navbar() {
                         label="Customer"
                         name="customer"
                     >
-                        <Input onChange={onChange} value={customerData.customer}/>
+                        <Input onChange={onChange} value={customerData.customer} />
                     </Form.Item>
 
                     <Form.Item
                         label="Meja"
                         name="meja"
                     >
-                        <Input onChange={onChange} value={customerData.meja}/>
+                        <Input onChange={onChange} value={customerData.meja} />
                     </Form.Item>
 
                     <Form.Item
