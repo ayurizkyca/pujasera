@@ -47,7 +47,6 @@ export default function Navbar() {
     };
 
     const showCart = () => {
-        console.log("halluuu go to cart")
         navigate(ROUTES.CART);
     }
 
