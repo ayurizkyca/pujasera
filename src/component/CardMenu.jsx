@@ -26,7 +26,7 @@ const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }
   // }
 
   return (
-    <div>
+    <div className=''>
       <Card
         hoverable
         style={{
@@ -34,9 +34,13 @@ const CardMenu = ({ id, name, description, imageUrl, price, idResto, namaResto }
         }}
         cover={<img className='h-[200px] object-cover' alt="card-image" src={imageUrl} />}
       >
-        <Meta title={name} description={description} />
-        <Typography.Title level={4} className='mt-5 font-bold text-end '>{price}</Typography.Title>
-        <ButtonBasic title={"add to cart"} onClick={addToCartHandler} />
+        <div className='flex flex-col justify-between h-full'>
+          <div>
+            <Meta title={name} description={<div className="line-clamp-2">{description}</div>}  />
+            <Typography.Title level={4} className='mt-5 font-bold text-end '>Rp. {price}</Typography.Title>
+          </div>
+          <ButtonBasic title={"add to cart"} onClick={addToCartHandler} />
+        </div>
       </Card>
     </div>
   )
