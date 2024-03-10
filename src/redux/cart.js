@@ -15,9 +15,9 @@ const cartSlice = createSlice({
     reducers: {
         addCustomer(state, action) {
             // const { customer, meja } = action.payload;
-            state.customer = action.payload.customer
-            state.meja = action.payload.meja
-            isUserEmpty = false
+            state.customer = action.payload.customer;
+            state.meja = action.payload.meja;
+            state.isUserEmpty = false;
             // const findCustomer = state.idCust;
             // if(findCustomer < 0){
             //     state.name = name,

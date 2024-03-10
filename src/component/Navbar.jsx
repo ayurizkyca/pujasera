@@ -22,6 +22,7 @@ export default function Navbar() {
         dispatch(authActions.logout());
     }
 
+    //drawer
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
         setOpen(true);
@@ -29,16 +30,13 @@ export default function Navbar() {
     const onClose = () => {
         setOpen(false);
     };
-
     const [customerData, setCustomerData] = useState({
         customer: "",
         meja: ""
     });
-
     const onFinish = (values) => {
         dispatch(cartActions.addCustomer(values));
     };
-
     const onChange = (event) => {
         setCustomerData({
             ...customerData,
