@@ -9,6 +9,7 @@ import ReportPage from '../page/ReportPage';
 import RestoMenuPage from '../page/RestoMenuPage';
 import NotFoundPage from '../page/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
+import CartPage from '../page/CartPage';
 
 const RoutesConfig = () => {
     return (
@@ -22,7 +23,8 @@ const RoutesConfig = () => {
                     <Route path={ROUTES.DETAIL_RESTO + '/:id'} element={<RestoMenuPage/>} />
                     {/* <Route path={`${ROUTES.DETAIL_RESTO}/:id`} element={<RestoMenuPage/>} /> */}
                 </Route>
-                <Route path='*' element={<NotFoundPage />} />
+                <Route path='*' element={<NotFoundPage />}/>
+                <Route path={ROUTES.CART} element={<PrivateRoute><CartPage/></PrivateRoute>}/>
             </Routes>
         </BrowserRouter>
     );

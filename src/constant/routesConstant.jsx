@@ -4,7 +4,8 @@ export const ROUTES = {
     HISTORY : '/home/history',
     PORTAL_RESTO : '/home/portal-resto',
     REPORT : '/home/report',
-    DETAIL_RESTO : '/home/detail-resto'
+    DETAIL_RESTO : '/home/detail-resto',
+    CART : '/cart'
 } 
 
 

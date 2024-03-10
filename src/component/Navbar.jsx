@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import ImagePujasera from "../assets/image/pujasera.png"
-import InputDropdown from './InputDropdown'
-import IconProfile from "../assets/image/mdi_user.png"
 import ButtonBasic from './ButtonBasic'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../redux/auth'
@@ -11,11 +9,14 @@ import {
 } from '@ant-design/icons';
 import { Drawer, Button, Form, Input, Badge } from 'antd';
 import { cartActions } from '../redux/cart'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../constant/routesConstant'
 
 
 export default function Navbar() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const logoutClick = () => {
         dispatch(authActions.logout());
@@ -44,7 +45,11 @@ export default function Navbar() {
             [event.target.name]: event.target.value,
         });
     };
-    
+
+    const showCart = () => {
+        console.log("halluuu go to cart")
+        navigate(ROUTES.CART);
+    }
 
     const username = useSelector((state) => state.auth.username);
 
@@ -59,11 +64,11 @@ export default function Navbar() {
                     <div>
                         <div className='flex gap-5 items-center'>
                             <Badge className='' count = {cartItemCount}>
-                                <ShoppingCartOutlined className='w-5' onClick={showDrawer} />
+                                <ShoppingCartOutlined className='w-5' onClick={showCart} />
                             </Badge>
                             <div className='flex gap-2'>
                                 <p>{username}</p>
-                                <UserOutlined />
+                                <UserOutlined onClick={showDrawer} />
                             </div>
                             <ButtonBasic title={"Logout"} onClick={logoutClick} />
                         </div>
