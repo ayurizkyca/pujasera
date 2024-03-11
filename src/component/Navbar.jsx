@@ -7,7 +7,7 @@ import {
     ShoppingCartOutlined,
     UserOutlined
 } from '@ant-design/icons';
-import { Drawer, Button, Form, Input, Badge } from 'antd';
+import { Drawer, Button, Form, Input, Badge, message } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
@@ -23,19 +23,29 @@ export default function Navbar() {
     }
 
     //drawer
-    const [open, setOpen] = useState(false);
-    const showDrawer = () => {
-        setOpen(true);
-    };
-    const onClose = () => {
-        setOpen(false);
-    };
+    const open = useSelector((state) => state.cart.isDrawerOpen);
+    const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
+    const handleDrawerOpen = () => {
+        if(isCustEmpty === false){
+            message.error("you've got a table")
+        }else{
+            dispatch(cartActions.toggleDrawer(false));
+        } 
+    }
+    const handleDrawerClose = () => {
+        dispatch(cartActions.toggleDrawer(true));
+    }
+
     const [customerData, setCustomerData] = useState({
         customer: "",
         meja: ""
     });
     const onFinish = (values) => {
         dispatch(cartActions.addCustomer(values));
+        setTimeout(() => {
+            message.success("You get the table, now choose your meal");
+        })
+        dispatch(cartActions.toggleDrawer(true));
     };
     const onChange = (event) => {
         setCustomerData({
@@ -60,19 +70,19 @@ export default function Navbar() {
                     <img src={ImagePujasera} alt="image-pujasera" className='w-[200px]' />
                     <div>
                         <div className='flex gap-5 items-center'>
-                            <Badge className='' count = {cartItemCount}>
+                            <Badge className='' count={cartItemCount}>
                                 <ShoppingCartOutlined className='w-5' onClick={showCart} />
                             </Badge>
                             <div className='flex gap-2'>
                                 <p>{username}</p>
-                                <UserOutlined onClick={showDrawer} />
+                                <UserOutlined onClick={handleDrawerOpen} />
                             </div>
                             <ButtonBasic title={"Logout"} onClick={logoutClick} />
                         </div>
                     </div>
                 </div>
             </div>
-            <Drawer title="Input Customer Data" onClose={onClose} open={open}>
+            <Drawer title="Input Customer Data" onClose={handleDrawerClose} open={open}>
                 <Form
                     name="basic"
                     onFinish={onFinish}
@@ -82,6 +92,12 @@ export default function Navbar() {
                     <Form.Item
                         label="Customer"
                         name="customer"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your name',
+                            },
+                        ]}
                     >
                         <Input onChange={onChange} value={customerData.customer} />
                     </Form.Item>
@@ -89,6 +105,12 @@ export default function Navbar() {
                     <Form.Item
                         label="Meja"
                         name="meja"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input table',
+                            },
+                        ]}
                     >
                         <Input onChange={onChange} value={customerData.meja} />
                     </Form.Item>
