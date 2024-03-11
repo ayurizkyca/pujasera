@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialCartState = {
     customer: "",
@@ -8,24 +8,16 @@ const initialCartState = {
     subtotal: 0,
     total: 0,
     isDrawerOpen : false,
-}
+};
 
 const cartSlice = createSlice({
     name: "cart",
     initialState: initialCartState,
     reducers: {
         addCustomer(state, action) {
-            // const { customer, meja } = action.payload;
             state.customer = action.payload.customer;
             state.meja = action.payload.meja;
             state.isCustEmpty = false;
-            // const findCustomer = state.idCust;
-            // if(findCustomer < 0){
-            //     state.name = name,
-            //     state.meja = meja
-            // }else{
-
-            // }
         },
        
         addMenuItem(state, action) {
@@ -57,8 +49,40 @@ const cartSlice = createSlice({
         toggleDrawer(state){
             state.isDrawerOpen = !state.isDrawerOpen;
         },
+        incrementQuantity(state, action) {
+            const { idResto, idMenu } = action.payload;
+            const restoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
+        
+            if (restoIndex !== -1) {
+                const menuIndex = state.menuItem[restoIndex].menu.findIndex(menu => menu.idMenu === idMenu);
+                if (menuIndex !== -1) {
+                    state.menuItem[restoIndex].menu[menuIndex].qty += 1; // Perbaikan operator +=
+                    state.subtotal += state.menuItem[restoIndex].menu[menuIndex].harga;
+                    state.total += state.menuItem[restoIndex].menu[menuIndex].harga;
+                }
+            }
+        },
+        
+        decrementQuantity(state, action) {
+            const { idResto, idMenu } = action.payload;
+            const restoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
+        
+            if (restoIndex !== -1) {
+                const menuIndex = state.menuItem[restoIndex].menu.findIndex(menu => menu.idMenu === idMenu);
+                if (menuIndex !== -1 && state.menuItem[restoIndex].menu[menuIndex].qty > 1) {
+                    state.menuItem[restoIndex].menu[menuIndex].qty--;
+                    state.subtotal -= state.menuItem[restoIndex].menu[menuIndex].harga;
+                    state.total -= state.menuItem[restoIndex].menu[menuIndex].harga;
+                }
+            }
+        },
         clearCart(state) {
-
+            state.customer = "";
+            state.meja = "";
+            state.isCustEmpty = true;
+            state.menuItem = [];
+            state.subtotal = 0;
+            state.total = 0;
         }
     }
 });

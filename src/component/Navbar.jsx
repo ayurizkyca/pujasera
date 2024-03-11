@@ -7,7 +7,7 @@ import {
     ShoppingCartOutlined,
     UserOutlined
 } from '@ant-design/icons';
-import { Drawer, Button, Form, Input, Badge, message } from 'antd';
+import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
@@ -18,6 +18,15 @@ export default function Navbar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    //modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     const logoutClick = () => {
         dispatch(authActions.logout());
     }
@@ -26,11 +35,11 @@ export default function Navbar() {
     const open = useSelector((state) => state.cart.isDrawerOpen);
     const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
     const handleDrawerOpen = () => {
-        if(isCustEmpty === false){
+        if (isCustEmpty === false) {
             message.error("you've got a table")
-        }else{
+        } else {
             dispatch(cartActions.toggleDrawer(false));
-        } 
+        }
     }
     const handleDrawerClose = () => {
         dispatch(cartActions.toggleDrawer(true));
@@ -77,7 +86,7 @@ export default function Navbar() {
                                 <p>{username}</p>
                                 <UserOutlined onClick={handleDrawerOpen} />
                             </div>
-                            <ButtonBasic title={"Logout"} onClick={logoutClick} />
+                            <ButtonBasic title={"Logout"} onClick={showModal} />
                         </div>
                     </div>
                 </div>
@@ -127,6 +136,9 @@ export default function Navbar() {
                     </Form.Item>
                 </Form>
             </Drawer>
+            <Modal title="Keluar" open={isModalOpen} onOk={logoutClick} onCancel={handleCancel} okType='danger'>
+                <p>Yakin ingin keluar?</p>
+            </Modal>
         </>
 
     )
