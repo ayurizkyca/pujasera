@@ -8,6 +8,7 @@ const initialCartState = {
     subtotal: 0,
     total: 0,
     isDrawerOpen : false,
+    purchaseHistory: [],
 };
 
 const cartSlice = createSlice({
@@ -76,14 +77,39 @@ const cartSlice = createSlice({
                 }
             }
         },
+        // clearCart(state) {
+        //     state.customer = "";
+        //     state.meja = "";
+        //     state.isCustEmpty = true;
+        //     state.menuItem = [];
+        //     state.subtotal = 0;
+        //     state.total = 0;
+        // }
         clearCart(state) {
+            // Simpan riwayat pembelian sebelum clear cart
+            if (state.menuItem.length > 0) {
+                state.purchaseHistory.push({
+                    customer: state.customer,
+                    meja: state.meja,
+                    menuItem: state.menuItem,
+                    subtotal: state.subtotal,
+                    total: state.total,
+                });
+            }
+            // Reset cart
             state.customer = "";
             state.meja = "";
             state.isCustEmpty = true;
             state.menuItem = [];
             state.subtotal = 0;
             state.total = 0;
-        }
+        },
+        
+        // Tambahan action jika Anda ingin menghapus riwayat pembelian tertentu dari history
+        removePurchase(state, action) {
+            const { index } = action.payload;
+            state.purchaseHistory.splice(index, 1);
+        },
     }
 });
 
