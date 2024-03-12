@@ -57,9 +57,10 @@ const SideBar = () => {
           style={{
             padding: 0,
             background: colorBgContainer,
+            minHeight:200,
           }}
         >
-          <h1 className='pl-[20px] text-primary font-bold text-2xl'>Selamat Datang, {username}</h1>
+          <h1 className='pl-[20px] text-primary font-bold text-2xl'>Hello, {username}. <br /> Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
         </Header>
         <Content
           style={{

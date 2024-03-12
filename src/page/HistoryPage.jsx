@@ -20,7 +20,7 @@ const HistoryPage = () => {
       key: 'customer',
     },
     {
-      title: 'Meja',
+      title: 'Table',
       dataIndex: 'meja',
       key: 'meja',
     },
@@ -42,17 +42,11 @@ const HistoryPage = () => {
       key: 'action',
       render: (text, record, index) => (
         <div>
-          <Button onClick={() => showDeleteConfirm(index)}>Delete</Button>
           <Button onClick={() => handleDetail(record)}>Detail</Button>
         </div>
       ),
     },
   ];
-
-  const showDeleteConfirm = (index) => {
-    setDeleteIndex(index);
-    setDeleteVisible(true);
-  };
 
   const handleDelete = () => {
     if (deleteIndex !== null) {
@@ -72,15 +66,6 @@ const HistoryPage = () => {
       <Typography.Title>History Page</Typography.Title>
       <Table columns={columns} dataSource={purchaseHistory} />
       <Modal
-        title="Confirmation"
-        open={deleteVisible}
-        okType='danger'
-        onCancel={() => setDeleteVisible(false)}
-        onOk={handleDelete}
-      >
-        <p>Are you sure you want to delete this order?</p>
-      </Modal>
-      <Modal
         title="Order Detail"
         open={detailVisible}
         onCancel={() => setDetailVisible(false)}
@@ -93,8 +78,8 @@ const HistoryPage = () => {
         {detail && (
           <div>
             <p><strong>Customer:</strong> {detail.customer}</p>
-            <p><strong>Meja:</strong> {detail.meja}</p>
-            <p><strong>Pesanan : </strong></p>
+            <p><strong>Table:</strong> {detail.meja}</p>
+            <p><strong>Orders : </strong></p>
             {detail.menuItem.map(resto => (
               <CardCart
                 key={resto.idResto}

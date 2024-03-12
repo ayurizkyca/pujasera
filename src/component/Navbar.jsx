@@ -112,7 +112,7 @@ export default function Navbar() {
                     </Form.Item>
 
                     <Form.Item
-                        label="Meja"
+                        label="Table"
                         name="meja"
                         rules={[
                             {
@@ -136,8 +136,8 @@ export default function Navbar() {
                     </Form.Item>
                 </Form>
             </Drawer>
-            <Modal title="Keluar" open={isModalOpen} onOk={logoutClick} onCancel={handleCancel} okType='danger'>
-                <p>Yakin ingin keluar?</p>
+            <Modal title="Logout" open={isModalOpen} onOk={logoutClick} onCancel={handleCancel} okType='danger'>
+                <p>Are you sure you want to exit?</p>
             </Modal>
         </>
 
