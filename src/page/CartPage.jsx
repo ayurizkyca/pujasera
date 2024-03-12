@@ -49,7 +49,7 @@ const CartPage = () => {
 
     return (
         <div className='h-screen flex flex-col'>
-            <div className='flex h-24 items-center justify-between p-8 shadow'>
+            <div className='flex h-[80px] items-center justify-between p-8 shadow'>
                 <img src={logo} alt="logo" />
                 <h1 className='text-2xl'>Shopping Cart</h1>
             </div>
