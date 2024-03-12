@@ -1,77 +1,17 @@
-// import React from 'react';
-// import { useSelector } from 'react-redux';
-// import { Typography } from 'antd';
-// import TableCustom from '../component/Table';
-// import { Table } from 'antd';
-
-// const columns = [
-//   {
-//     title: 'Customer',
-//     dataIndex: 'customer',
-//     key: 'customer',
-//   },
-//   {
-//     title: 'Meja',
-//     dataIndex: 'meja',
-//     key: 'meja',
-//   },
-//   {
-//     title: 'Restaurants',
-//     dataIndex: 'restaurant',
-//     key: 'restaurant',
-//   },
-//   {
-//     title: 'Total',
-//     dataIndex: 'total',
-//     key: 'total',
-//   },
-//   {
-//     title: 'Action',
-//     dataIndex: '',
-//     key: 'x',
-//     render: () => <a>Delete</a>,
-//   },
-// ];
-
-// const HistoryPage = () => {
-//   // Mengambil data riwayat pembelian dari state Redux
-//   const purchaseHistory = useSelector(state => state.purchaseHistory); // Pastikan slice Redux yang menyimpan riwayat pembelian disesuaikan dengan nama slice yang sebenarnya
-
-//   return (
-//     <div>
-//       <Typography.Title>History Page</Typography.Title>
-//       {/* Meneruskan data riwayat pembelian ke komponen TableCustom */}
-//       {/* <TableCustom data={purchaseHistory} /> */}
-//       <Table
-//         columns={columns}
-//         expandable={{
-//           expandedRowRender: (record) => (
-//             <p
-//               style={{
-//                 margin: 0,
-//               }}
-//             >
-//               {record.detail}
-//             </p>
-//           ),
-//           rowExpandable: (record) => record.name !== 'Not Expandable',
-//         }}
-//         dataSource={purchaseHistory}
-//       />
-//     </div>
-//   );
-// };
-
-// export default HistoryPage;
-
-import React from 'react';
-import { Table, Button } from 'antd';
+import React, { useState } from 'react';
+import { Table, Button, Typography, Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartActions } from '../redux/cart';
+import CardCart from '../component/CardCart';
+import ListMenuCart from '../component/ListMenuCart';
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
   const dispatch = useDispatch();
+  const [detailVisible, setDetailVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [detail, setDetail] = useState(""); 
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const columns = [
     {
@@ -101,19 +41,82 @@ const HistoryPage = () => {
       title: 'Action',
       key: 'action',
       render: (text, record, index) => (
-        <Button onClick={() => handleRemove(index)}>Delete</Button>
+        <div>
+          <Button onClick={() => showDeleteConfirm(index)}>Delete</Button>
+          <Button onClick={() => handleDetail(record)}>Detail</Button>
+        </div>
       ),
     },
   ];
 
-  const handleRemove = (index) => {
-    dispatch(cartActions.removePurchase({ index }));
+  const showDeleteConfirm = (index) => {
+    setDeleteIndex(index);
+    setDeleteVisible(true);
+  };
+
+  const handleDelete = () => {
+    if (deleteIndex !== null) {
+      dispatch(cartActions.removePurchase({ index: deleteIndex }));
+      setDeleteIndex(null);
+    }
+    setDeleteVisible(false);
+  };
+
+  const handleDetail = (record) => {
+    setDetail(record);
+    setDetailVisible(true);
   };
 
   return (
     <div>
-      <h1>History Page</h1>
+      <Typography.Title>History Page</Typography.Title>
       <Table columns={columns} dataSource={purchaseHistory} />
+      <Modal
+        title="Confirmation"
+        open={deleteVisible}
+        okType='danger'
+        onCancel={() => setDeleteVisible(false)}
+        onOk={handleDelete}
+      >
+        <p>Are you sure you want to delete this order?</p>
+      </Modal>
+      <Modal
+        title="Order Detail"
+        open={detailVisible}
+        onCancel={() => setDetailVisible(false)}
+        footer={[
+          <Button key="close" onClick={() => setDetailVisible(false)}>
+            Close
+          </Button>,
+        ]}
+      >
+        {detail && (
+          <div>
+            <p><strong>Customer:</strong> {detail.customer}</p>
+            <p><strong>Meja:</strong> {detail.meja}</p>
+            <p><strong>Pesanan : </strong></p>
+            {detail.menuItem.map(resto => (
+              <CardCart
+                key={resto.idResto}
+                namaResto={resto.namaResto}
+              >
+                {resto.menu.map(menu => (
+                            <ListMenuCart
+                                key={menu.id}
+                                namaMenu={menu.namaMenu}
+                                harga={menu.harga}
+                                qty={menu.qty}
+                                subTotal={menu.qty * menu.harga}
+                                incrementClick={() => incrementQuantity(resto.id, menu.id)}
+                                decrementClick={() => decrementQuantity(resto.id, menu.id)}
+                            />
+                        ))}
+              </CardCart>
+            ))}
+            <p><strong>Total: </strong><span className='text-primary font-bold'>{detail.total}</span></p>            
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
