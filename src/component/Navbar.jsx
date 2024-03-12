@@ -74,7 +74,7 @@ export default function Navbar() {
 
     return (
         <>
-            <div className='flex justify-between border h-[80px] shadow-lg shadow-slate-200 sticky'>
+            <div className='flex justify-between border h-[80px] bg-white shadow-lg shadow-slate-200 sticky top-0 z-50'>
                 <div className='flex justify-between w-full items-center mx-10'>
                     <img src={ImagePujasera} alt="image-pujasera" className='w-[200px]' />
                     <div>
@@ -97,6 +97,7 @@ export default function Navbar() {
                     onFinish={onFinish}
                     // onFinishFailed={onFinishFailed}
                     autoComplete="off"
+                    layout='vertical'
                 >
                     <Form.Item
                         label="Customer"
