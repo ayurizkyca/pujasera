@@ -3,9 +3,11 @@ export const ROUTES = {
     HOME : '/home',
     HISTORY : '/home/history',
     PORTAL_RESTO : '/home/portal-resto',
-    REPORT : '/home/report',
+    STATS : '/home/stats',
     DETAIL_RESTO : '/home/detail-resto',
-    CART : '/cart'
+    CART : '/cart',
+    REPORT : '/home/stats/report',
+    DASHBOARD : '/home/stats/dashboard'
 } 
 
 

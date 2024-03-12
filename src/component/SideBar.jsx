@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import {
   HomeOutlined,
   BookOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  DashboardOutlined,
+  SnippetsOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -24,7 +26,10 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem('Portal Resto', ROUTES.PORTAL_RESTO, <HomeOutlined />),
   getItem('History', ROUTES.HISTORY, <BookOutlined />),
-  getItem('Report', ROUTES.REPORT, <FileTextOutlined />),
+  getItem('Stats', ROUTES.REPORT, <SnippetsOutlined />, [
+    getItem('Dashboard',ROUTES.DASHBOARD, <DashboardOutlined/> ),
+    getItem('Report',ROUTES.REPORT, <FileTextOutlined /> ),
+  ]),
 ];
 
 
@@ -48,9 +53,9 @@ const SideBar = () => {
         minHeight: '100vh',
       }}
     >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} theme='light'>
+      <Sider className="sticky left-0 -z-1" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} theme='light'>
         <div className="demo-logo-vertical" />
-        <Menu className='' defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleClick} />
+        <Menu className='sticky left-0 -z-1' defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleClick} />
       </Sider>
       <Layout>
         <Header className='flex items-center'
@@ -60,7 +65,7 @@ const SideBar = () => {
             minHeight:200,
           }}
         >
-          <h1 className='pl-[20px] text-primary font-bold text-2xl'>Hello, {username}. <br /> Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
+          <h1 className='pl-[20px] text-primary font-bold text-2xl z-1'>Hello, {username}. <br /> Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
         </Header>
         <Content
           style={{

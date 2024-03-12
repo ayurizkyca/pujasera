@@ -7,11 +7,8 @@ import ListMenuCart from '../component/ListMenuCart';
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
-  const dispatch = useDispatch();
   const [detailVisible, setDetailVisible] = useState(false);
-  const [deleteVisible, setDeleteVisible] = useState(false);
   const [detail, setDetail] = useState(""); 
-  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const columns = [
     {
@@ -47,14 +44,6 @@ const HistoryPage = () => {
       ),
     },
   ];
-
-  const handleDelete = () => {
-    if (deleteIndex !== null) {
-      dispatch(cartActions.removePurchase({ index: deleteIndex }));
-      setDeleteIndex(null);
-    }
-    setDeleteVisible(false);
-  };
 
   const handleDetail = (record) => {
     setDetail(record);
