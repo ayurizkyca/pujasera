@@ -45,7 +45,7 @@ const cartSlice = createSlice({
                 state.menuItem.push(newResto);
                 state.subtotal += harga * qty;
             }
-            state.total = state.subtotal; // Set total sama dengan subtotal saat menambah item baru
+            state.total = state.subtotal;
         },
         toggleDrawer(state){
             state.isDrawerOpen = !state.isDrawerOpen;
@@ -77,14 +77,6 @@ const cartSlice = createSlice({
                 }
             }
         },
-        // clearCart(state) {
-        //     state.customer = "";
-        //     state.meja = "";
-        //     state.isCustEmpty = true;
-        //     state.menuItem = [];
-        //     state.subtotal = 0;
-        //     state.total = 0;
-        // }
         clearCart(state) {
             // Simpan riwayat pembelian sebelum clear cart
             if (state.menuItem.length > 0) {
