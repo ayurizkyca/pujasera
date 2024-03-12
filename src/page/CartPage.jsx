@@ -6,6 +6,8 @@ import ButtonBasic from '../component/ButtonBasic';
 import logo from "../assets/image/pujasera.png"
 import { cartActions } from '../redux/cart';
 import { Modal, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constant/routesConstant';
 
 const CartPage = () => {
     const menuItem = useSelector(state => state.cart.menuItem);
@@ -14,11 +16,13 @@ const CartPage = () => {
     const customer = useSelector((state) => state.cart.customer)
     const meja = useSelector((state) => state.cart.meja);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleCheckout = () => {
-        dispatch(cartActions.clearCart());
         setIsModalOpen(false);
         setTimeout(() => {
-            message.info("Silahkan menunggu makanan di meja")
+            navigate(ROUTES.PORTAL_RESTO);
+            dispatch(cartActions.clearCart());
+            message.info("Checkout Success, Please wait for your food at the table.")
         }, 800)
     }
 
@@ -36,7 +40,7 @@ const CartPage = () => {
         if(total>0){
             setIsModalOpen(true);
         }else{
-            message.error("Keranjang belanja masih kosong")
+            message.error("The shopping cart is empty.")
         }
     };
     const handleCancel = () => {
@@ -47,11 +51,11 @@ const CartPage = () => {
         <div className='h-screen flex flex-col'>
             <div className='flex h-24 items-center justify-between p-8 shadow'>
                 <img src={logo} alt="logo" />
-                <h1 className='text-2xl'>Keranjang Belanja</h1>
+                <h1 className='text-2xl'>Shopping Cart</h1>
             </div>
             <div className='px-8 py-3'>
                 <h1 className='text-xl font-medium'>Customer : {customer}</h1>
-                <h1 className='text-xl font-medium'>Meja : {meja}</h1>
+                <h1 className='text-xl font-medium'>Table : {meja}</h1>
             </div>
             <ul className=' flex-grow'>
                 {menuItem.map(resto => (
@@ -74,11 +78,11 @@ const CartPage = () => {
                 ))}
             </ul>
             <div className='sticky bottom-0 bg-white border-t border-primary p-4 flex justify-between items-center'>
-                <h3 className=''>Total ({cartItemCount}) produk : <span className='font-bold text-2xl text-primary'>Rp. {total}</span></h3>
+                <h3 className=''>Total ({cartItemCount}) product : <span className='font-bold text-2xl text-primary'>Rp. {total}</span></h3>
                 <ButtonBasic className="" title={"checkout"} onClick={showModal} />
             </div>
             <Modal title="Checkout" open={isModalOpen} onOk={handleCheckout} onCancel={handleCancel} okType='danger'>
-                <p>Pastikan pesanan sudah benar, checkout sekarang?</p>
+                <p>Please ensure your order is correct. Proceed to checkout now?</p>
             </Modal>
         </div>
     );
