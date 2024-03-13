@@ -15,6 +15,7 @@ const Accordion = () => {
         {purchaseHistory.map((purchase, index) => (
           <Panel header={generateHeader(purchase)} key={index}>
             <div>
+              <p>Date : {purchase.date}</p>
               <p>Customer: {purchase.customer}</p>
               <p>Table: {purchase.meja}</p>
               <ul>
@@ -43,6 +44,7 @@ const Accordion = () => {
 };
 
 const generateHeader = (purchase) => {
+  const date = purchase.date;
   const customer = purchase.customer;
   const meja = purchase.meja;
   const total = purchase.total;
@@ -50,12 +52,13 @@ const generateHeader = (purchase) => {
   const totalMenu = purchase.menuItem.reduce((total, resto) => total + resto.menu.length, 0);
 
   return(
-    <div className='grid grid-cols-5 gap-10'>
+    <div className='grid grid-cols-6 gap-10'>
+      <p>Date : {date}</p>
       <p>Customer : {customer}</p>
       <p>Table : {meja}</p>
       <p>Items : {totalMenu}</p>
       <p>Restos : {restos}</p>
-      <p>Total :{total}</p>
+      <p>Total : Rp.{total}</p>
     </div>
   )
 };
