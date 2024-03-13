@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Typography, Modal } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { cartActions } from '../redux/cart';
+import { useSelector } from 'react-redux';
 import CardCart from '../component/CardCart';
 import ListMenuCart from '../component/ListMenuCart';
 
@@ -53,7 +52,7 @@ const HistoryPage = () => {
   return (
     <div>
       <Typography.Title>History Page</Typography.Title>
-      <Table columns={columns} dataSource={purchaseHistory} />
+      <Table columns={columns} dataSource={purchaseHistory} pagination={{pageSize:5}} />
       <Modal
         title="Order Detail"
         open={detailVisible}
