@@ -1,7 +1,4 @@
 import React from 'react'
-import {
-    ShoppingOutlined,
-} from '@ant-design/icons';
 
 const CardDashboard = ({ title, value, icon }) => {
 
