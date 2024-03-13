@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <ConfigProvider theme={theme}>
-        <RouteConfig/>
+        <RouteConfig />
       </ConfigProvider>
     </>
   )
