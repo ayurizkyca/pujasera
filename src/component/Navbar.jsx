@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../redux/auth'
 import {
     ShoppingCartOutlined,
-    UserOutlined
+    UserOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
@@ -17,10 +18,24 @@ export default function Navbar() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const customerExist = useSelector((state) => state.cart.customer)
-    const tableExist = useSelector((state) => state.cart.meja)
+    const customerExist = useSelector((state) => state.cart.customer);
+    const tableExist = useSelector((state) => state.cart.meja);
 
-    //modal
+    //modal delete Customer
+    const [modalDeleteOpen, setModalDeletOpen] = useState(false);
+    const showModalDelete = () => {
+        setModalDeletOpen(true);
+    };
+    const handleCancelDelete = () => {
+        setModalDeletOpen(false);
+    };
+    const handleDeleteCust = () => {
+        dispatch(cartActions.deleteCustomer());
+        message.success("Customer Deleted");
+        setModalDeletOpen(false);
+    }
+
+    //modal logout
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
@@ -28,7 +43,6 @@ export default function Navbar() {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
     const logoutClick = () => {
         dispatch(authActions.logout());
     }
@@ -63,11 +77,8 @@ export default function Navbar() {
     const showCart = () => {
         navigate(ROUTES.CART);
     }
-
     const username = useSelector((state) => state.auth.username);
-
     const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
-
 
     return (
         <>
@@ -91,50 +102,6 @@ export default function Navbar() {
                 </div>
             </div>
             <Drawer title={isCustEmpty ? "Input Customer Detail" : "Customer Detail"} onClose={handleDrawerClose} open={open}>
-                {/* <Form
-                    name="basic"
-                    onFinish={onFinish}
-                    autoComplete="off"
-                    layout='vertical'
-                >
-                    <Form.Item
-                        label="Customer"
-                        name="customer"
-                        placeholder="eg.ayu"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your name',
-                            },
-                        ]}
-                    >
-                        <Input placeholder="eg. ayu" onChange={onChange} value={customerData.customer} />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Table"
-                        name="meja"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input table',
-                            },
-                        ]}
-                    >
-                        <Input placeholder="eg. 10" onChange={onChange} value={customerData.meja} />
-                    </Form.Item>
-
-                    <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
-                    >
-                        <Button type="primary" htmlType="submit" className='bg-primary'>
-                            Get Table
-                        </Button>
-                    </Form.Item>
-                </Form> */}
                 {isCustEmpty ? (
                     <Form
                         name="basic"
@@ -180,15 +147,21 @@ export default function Navbar() {
                         </Form.Item>
                     </Form>
                 ) : (
-                    <div>
-                        <p><span className='font-bold'>Customer :</span> {customerExist}</p>
-                        <p><span className='font-bold'>Table :</span> {tableExist}</p>
+                    <div className='flex justify-between border p-5 rounded-md'>
+                        <div>
+                            <p><span className='font-bold'>Customer :</span> {customerExist}</p>
+                            <p><span className='font-bold'>Table :</span> {tableExist}</p>
+                        </div>
+                        <DeleteOutlined onClick={showModalDelete} />
                     </div>
                 )}
 
             </Drawer>
             <Modal title="Logout" open={isModalOpen} onOk={logoutClick} onCancel={handleCancel} okType='danger'>
-                <p>Are you sure you want to exit?</p>
+                <p>Are you sure want to exit?</p>
+            </Modal>
+            <Modal title="Delete Customer" open={modalDeleteOpen} onOk={handleDeleteCust} onCancel={handleCancelDelete} okType='danger'>
+                <p>Are you sure to delete customer?</p>
             </Modal>
         </>
 

@@ -47,6 +47,13 @@ const cartSlice = createSlice({
             }
             state.pendingAddToCart = null;
         },
+        deleteCustomer(state) {
+            state.customer = "";
+            state.meja = "";
+            state.isCustEmpty = true;
+            state.pendingAddToCart = null;
+            state.menuItem= [];
+        },
         addMenuItem(state, action) {
             if (state.isCustEmpty) {
                 state.pendingAddToCart = action.payload;
