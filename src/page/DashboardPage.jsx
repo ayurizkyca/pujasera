@@ -7,7 +7,8 @@ import PieChart from '../component/PieChart';
 import {
   WalletOutlined,
   TeamOutlined,
-  TrophyOutlined
+  TrophyOutlined,
+  TagsOutlined,
 } from '@ant-design/icons';
 import { formatRupiah } from '../util/format';
 
@@ -109,11 +110,11 @@ const DashboardPage = () => {
         borderWidth: 1,
       },
     ],
-    options : {
-      plugins : {
-        legend : {
-          display : true,
-          labels : {
+    options: {
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
             color: 'rgb(255, 99, 132)',
           }
         }
@@ -177,8 +178,13 @@ const DashboardPage = () => {
           <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
         </div>
         <div className='border p-5 rounded-md'>
-          <h3 className='text-xl'>Latest Purchase</h3>
-          <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
+          <div className='flex items-center gap-3'>
+            <TagsOutlined />
+            <h3 className='text-xl'>Latest Purchase</h3>
+          </div>
+          <div className='overflow-auto'>
+            <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
+          </div>
         </div>
       </div>
       <div className='space-y-5'>
@@ -187,7 +193,7 @@ const DashboardPage = () => {
           <div className='border p-5 rounded-md flex items-center justify-center'>
             <BarChart data={barChartData} />
           </div>
-          <div className='border p-5 rounded-md items-center justify-center'>
+          <div className='border p-5 rounded-md flex items-center justify-center'>
             <PieChart data={pieChartData} />
           </div>
         </div>
