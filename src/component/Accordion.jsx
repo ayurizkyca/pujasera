@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collapse } from 'antd';
+import { Collapse, Tooltip } from 'antd';
 import CardCart from './CardCart';
 import ListMenuCart from './ListMenuCart';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ const Accordion = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
 
   return (
-    <div>
+    <div className='overflow-auto'>
       <Collapse accordion>
         {purchaseHistory.map((purchase, index) => (
           <Panel header={generateHeader(purchase)} key={index}>
@@ -52,13 +52,15 @@ const generateHeader = (purchase) => {
   const restos = purchase.menuItem.map((resto) => resto.namaResto).join(', ');
   const totalMenu = purchase.menuItem.reduce((total, resto) => total + resto.menu.length, 0);
 
-  return(
-    <div className='grid grid-cols-6'>
+  return (
+    <div className='grid grid-cols-6 gap-10'>
       <p>{date}</p>
       <p>{customer}</p>
       <p>Table : {meja}</p>
       <p>Items : {totalMenu}</p>
-      <p>Restos : {restos}</p>
+      <Tooltip title={restos} trigger="hover">
+        <p className='truncate'>Restos : {restos}</p>
+      </Tooltip>
       <p>{formatRupiah(total)}</p>
     </div>
   )

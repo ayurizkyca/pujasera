@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Typography, Modal } from 'antd';
+import { Table, Button, Typography, Modal, Tooltip } from 'antd';
 import { useSelector } from 'react-redux';
 import CardCart from '../component/CardCart';
 import ListMenuCart from '../component/ListMenuCart';
@@ -9,7 +9,7 @@ const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
   const purchaseDataSorted = [...purchaseHistory].reverse();
   const [detailVisible, setDetailVisible] = useState(false);
-  const [detail, setDetail] = useState(""); 
+  const [detail, setDetail] = useState("");
 
   const columns = [
     {
@@ -32,7 +32,11 @@ const HistoryPage = () => {
       dataIndex: 'restaurant',
       key: 'restaurant',
       render: (text, record) => (
-        <span>{record.menuItem.map((item) => item.namaResto).join(', ')}</span>
+        <Tooltip title={record.menuItem.map((item) => item.namaResto).join(', ')}>
+          <span className='truncate'>
+            {record.menuItem.map((item) => item.namaResto).join(', ')}
+          </span>
+        </Tooltip>
       ),
     },
     {
@@ -62,7 +66,9 @@ const HistoryPage = () => {
   return (
     <div>
       <Typography.Title>History Page</Typography.Title>
-      <Table columns={columns} dataSource={purchaseDataSorted} pagination={{pageSize:5}} />
+      <div className='overflow-auto'>
+        <Table columns={columns} dataSource={purchaseDataSorted} pagination={{ pageSize: 5 }} />
+      </div>
       <Modal
         title="Order Detail"
         open={detailVisible}
@@ -84,19 +90,19 @@ const HistoryPage = () => {
                 namaResto={resto.namaResto}
               >
                 {resto.menu.map(menu => (
-                            <ListMenuCart
-                                key={menu.id}
-                                namaMenu={menu.namaMenu}
-                                harga={menu.harga}
-                                qty={menu.qty}
-                                subTotal={menu.qty * menu.harga}
-                                incrementClick={() => incrementQuantity(resto.id, menu.id)}
-                                decrementClick={() => decrementQuantity(resto.id, menu.id)}
-                            />
-                        ))}
+                  <ListMenuCart
+                    key={menu.id}
+                    namaMenu={menu.namaMenu}
+                    harga={menu.harga}
+                    qty={menu.qty}
+                    subTotal={menu.qty * menu.harga}
+                    incrementClick={() => incrementQuantity(resto.id, menu.id)}
+                    decrementClick={() => decrementQuantity(resto.id, menu.id)}
+                  />
+                ))}
               </CardCart>
             ))}
-            <p><strong>Total: </strong><span className='text-primary font-bold'>{formatRupiah(detail.total)}</span></p>            
+            <p><strong>Total: </strong><span className='text-primary font-bold'>{formatRupiah(detail.total)}</span></p>
           </div>
         )}
       </Modal>
