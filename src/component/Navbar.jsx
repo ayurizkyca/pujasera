@@ -83,9 +83,9 @@ export default function Navbar() {
     return (
         <>
             <div className='flex justify-between border h-[80px] bg-white shadow-lg shadow-slate-200 sticky top-0 z-50'>
-                <div className='flex justify-between w-full items-center mx-10'>
+                <div className='flex justify-between w-full items-center mx-2 lg:mx-10'>
                     <Link to={ROUTES.PORTAL_RESTO}>
-                        <img src={ImagePujasera} alt="image-pujasera" className='w-[200px]' />
+                        <img src={ImagePujasera} alt="image-pujasera" className='w-[100px] lg:w-[200px]' />
                     </Link>
                     <div>
                         <div className='flex gap-5 items-center'>
@@ -112,27 +112,15 @@ export default function Navbar() {
                         <Form.Item
                             label="Customer"
                             name="customer"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your name',
-                                },
-                            ]}
                         >
-                            <Input onChange={onChange} value={customerData.customer} />
+                            <Input onChange={onChange} value={customerData.customer} required />
                         </Form.Item>
 
                         <Form.Item
                             label="Table"
                             name="meja"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input table',
-                                },
-                            ]}
                         >
-                            <Input onChange={onChange} value={customerData.meja} />
+                            <Input onChange={onChange} value={customerData.meja} required type="number"/>
                         </Form.Item>
 
                         <Form.Item
@@ -161,7 +149,7 @@ export default function Navbar() {
                 <p>Are you sure want to exit?</p>
             </Modal>
             <Modal title="Delete Customer" open={modalDeleteOpen} onOk={handleDeleteCust} onCancel={handleCancelDelete} okType='danger'>
-                <p>Are you sure to delete customer?</p>
+                <p>Are you sure to delete customer?<br/> It will be delete your shopping card list</p>
             </Modal>
         </>
 
