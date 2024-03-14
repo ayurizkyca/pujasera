@@ -20,7 +20,7 @@ const cartSlice = createSlice({
             state.customer = action.payload.customer;
             state.meja = action.payload.meja;
             state.isCustEmpty = false;
-            if(state.pendingAddToCart){
+            if (state.pendingAddToCart) {
                 const { idResto, namaResto, idMenu, namaMenu, harga, qty } = state.pendingAddToCart;
                 const existingRestoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
                 if (existingRestoIndex !== -1) {
@@ -52,7 +52,21 @@ const cartSlice = createSlice({
             state.meja = "";
             state.isCustEmpty = true;
             state.pendingAddToCart = null;
-            state.menuItem= [];
+            state.menuItem = [];
+            state.total = 0;
+            state.subtotal = 0;
+        },
+        deleteMenu(state, action) {
+            const { idResto, idMenu } = action.payload;
+            const resto = state.menuItem.find(resto => resto.idResto === idResto);
+            if (resto) {
+                const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
+                if (menuItemIndex !== -1) {
+                    const deletedItem = resto.menu.splice(menuItemIndex, 1)[0];
+                    state.subtotal -= deletedItem.harga * deletedItem.qty;
+                    state.total -= deletedItem.harga * deletedItem.qty;
+                }
+            }
         },
         addMenuItem(state, action) {
             if (state.isCustEmpty) {
@@ -86,35 +100,6 @@ const cartSlice = createSlice({
         toggleDrawer(state) {
             state.isDrawerOpen = !state.isDrawerOpen;
         },
-        // incrementQuantity(state, action) {
-        //     const { idResto, idMenu } = action.payload;
-        //     const restoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
-
-        //     if (restoIndex !== -1) {
-        //         const existingResto = state.menuItem[restoIndex];
-        //         const menuIndex = existingResto.menu.findIndex(menu => menu.idMenu === idMenu);
-        //         if (menuIndex !== -1) {
-        //             existingResto.menu[menuIndex].qty += 1;
-        //             // menuIndex.qty += 1; // Perbaikan operator +=
-        //             // state.subtotal += state.menuIndex.harga;
-        //             // state.total += state.menuIndex.harga;
-        //         }
-        //     }
-        // },
-
-        // incrementQuantity(state, action){
-        //     const { idResto, idMenu } = action.payload;
-        //     let restoExists = state.cart.find(resto => resto.id === idResto);
-        //     if (restoExists) {
-        //         const itemExists = restoExists.menu.find(item => item.id === idMenu);
-        //         if (itemExists) {
-        //             itemExists.qty += 1;
-        //             itemExists.subtotal += itemExists.harga;
-        //             restoExists.total += itemExists.harga; // Update the restaurant's totalharga
-        //         }
-        //     }
-        //     // recalculateTotalharga(state);
-        // },
 
         // incrementQuantity(state, action) {
         //     const { idResto, idMenu } = action.payload;
@@ -130,73 +115,36 @@ const cartSlice = createSlice({
         //     }
         //   },
 
-
-        // incrementQuantity(state, action) {
-        //     const { idResto, idMenu } = action.payload;
-
-        //     // Temukan restoran yang sesuai berdasarkan idResto
-        //     const resto = state.cart.menuItem.find(resto => resto.idResto === idResto);
-
-        //     // Jika restoran ditemukan
-        //     if (resto) {
-        //       // Temukan item menu yang sesuai berdasarkan idMenu
-        //       const menuItem = resto.menu.find(item => item.idMenu === idMenu);
-
-        //       // Jika item menu ditemukan
-        //       if (menuItem) {
-        //         // Tambahkan jumlahnya
-        //         menuItem.qty += 1;
-        //         // Tambahkan subtotalnya
-        //         menuItem.subtotal += menuItem.harga;
-        //         // Tambahkan ke total restoran
-        //         resto.total += menuItem.harga;
-        //         // Perbarui subtotal dan total cart
-        //         state.cart.subtotal += menuItem.harga;
-        //         state.cart.total += menuItem.harga;
-        //       }
-        //     }
-        //   },
-
         incrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
-
-            // Temukan restoran yang sesuai berdasarkan idResto
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
-
-            // Jika restoran ditemukan
             if (resto) {
-                // Temukan item menu yang sesuai berdasarkan idMenu
                 const menuItem = resto.menu.find(item => item.idMenu === idMenu);
-
-                // Jika item menu ditemukan
                 if (menuItem) {
-                    // Tambahkan jumlahnya
                     menuItem.qty += 1;
-                    // Tambahkan subtotalnya
                     menuItem.subtotal += menuItem.harga;
-                    // Tambahkan ke total restoran
                     resto.total += menuItem.harga;
-                    // Perbarui subtotal dan total cart
                     state.subtotal += menuItem.harga;
                     state.total += menuItem.harga;
                 }
             }
         },
 
-
         decrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
-            const restoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
-
-            if (restoIndex !== -1) {
-                const menuIndex = state.menuItem[restoIndex].menu.findIndex(menu => menu.idMenu === idMenu);
-                if (menuIndex !== -1 && state.menuItem[restoIndex].menu[menuIndex].qty > 1) {
-                    state.menuItem[restoIndex].menu[menuIndex].qty--;
-                    state.subtotal -= state.menuItem[restoIndex].menu[menuIndex].harga;
-                    state.total -= state.menuItem[restoIndex].menu[menuIndex].harga;
+            const resto = state.menuItem.find(resto => resto.idResto === idResto);
+            if (resto) {
+                const menuItem = resto.menu.find(item => item.idMenu === idMenu);
+                if (menuItem.qty > 1) {
+                    menuItem.qty -= 1;
+                    menuItem.subtotal -= menuItem.harga;
+                    resto.total -= menuItem.harga;
+                    state.subtotal -= menuItem.harga;
+                    state.total -= menuItem.harga;
                 }
             }
         },
+
         clearCart(state) {
             const currentDate = new Date(Date.now());
             const formattedDate = currentDate.toLocaleDateString('en-GB');
@@ -210,7 +158,6 @@ const cartSlice = createSlice({
                     total: state.total,
                 });
             }
-            // Reset cart
             state.customer = "";
             state.meja = "";
             state.isCustEmpty = true;
@@ -218,8 +165,6 @@ const cartSlice = createSlice({
             state.subtotal = 0;
             state.total = 0;
         },
-
-        // Tambahan action jika Anda ingin menghapus riwayat pembelian tertentu dari history
         removePurchase(state, action) {
             const { index } = action.payload;
             state.purchaseHistory.splice(index, 1);

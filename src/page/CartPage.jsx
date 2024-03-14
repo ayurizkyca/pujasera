@@ -6,7 +6,7 @@ import ButtonBasic from '../component/ButtonBasic';
 import logo from "../assets/image/pujasera.png"
 import { cartActions } from '../redux/cart';
 import { Modal, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ROUTES } from '../constant/routesConstant';
 import { formatRupiah } from '../util/format';
 
@@ -27,20 +27,12 @@ const CartPage = () => {
         }, 800)
     }
 
-    const incrementQuantity = (idResto, idMenu) => {
-        dispatch(cartActions.incrementQuantity({ idResto, idMenu }));
-    };
-
-    const decrementQuantity = (idResto, idMenu) => {
-        dispatch(cartActions.decrementQuantity({ idResto, idMenu }));
-    };
-
     //modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
-        if(total>0){
+        if (total > 0) {
             setIsModalOpen(true);
-        }else{
+        } else {
             message.error("The shopping cart is empty.")
         }
     };
@@ -51,35 +43,23 @@ const CartPage = () => {
     return (
         <div className='h-screen flex flex-col'>
             <div className='flex h-[80px] items-center justify-between p-8 shadow'>
-                <img src={logo} alt="logo" />
-                <h1 className='text-2xl'>Shopping Cart</h1>
+                <Link to={ROUTES.PORTAL_RESTO}>
+                    <img src={logo} alt="logo" className='w-[100px] md:w-[200px]' />
+                </Link>
+                <h1 className='md:text-2xl'>Shopping Cart</h1>
             </div>
             <div className='px-8 py-3'>
                 <h1 className='text-xl font-medium'>Customer : {customer}</h1>
                 <h1 className='text-xl font-medium'>Table : {meja}</h1>
             </div>
-            <ul className=' flex-grow'>
-                {menuItem.map(resto => (
-                    <CardCart
-                        key={resto.idResto}
-                        namaResto={resto.namaResto}
-                    >
-                        {resto.menu.map(menu => (
-                            <ListMenuCart
-                                key={menu.id}
-                                namaMenu={menu.namaMenu}
-                                harga={menu.harga}
-                                qty={menu.qty}
-                                subTotal={menu.qty * menu.harga}
-                                incrementClick={() => incrementQuantity(resto.id, menu.id)}
-                                decrementClick={() => decrementQuantity(resto.id, menu.id)}
-                            />
-                        ))}
-                    </CardCart>
-                ))}
+            <ul className='flex-grow'>
+                <CardCart/>
             </ul>
             <div className='sticky bottom-0 bg-white border-t border-primary p-4 flex justify-between items-center'>
-                <h3 className=''>Total ({cartItemCount}) product : <span className='font-bold text-2xl text-primary'>{formatRupiah(total)}</span></h3>
+                <div className='md:flex md:items-center'>
+                <h3 className=''>Total ({cartItemCount}) product :</h3>
+                <h3 className='font-bold text-2xl text-primary'>{formatRupiah(total)}</h3>
+                </div>
                 <ButtonBasic className="" title={"checkout"} onClick={showModal} />
             </div>
             <Modal title="Checkout" open={isModalOpen} onOk={handleCheckout} onCancel={handleCancel} okType='danger'>
