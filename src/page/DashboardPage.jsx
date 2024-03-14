@@ -9,13 +9,20 @@ import {
   TeamOutlined,
   TrophyOutlined
 } from '@ant-design/icons';
+import { formatRupiah } from '../util/format';
 
 const DashboardPage = () => {
   const purchaseHistory = useSelector(state => state.cart.purchaseHistory);
   const totalRevenue = purchaseHistory.reduce((total, purchase) => total + purchase.total, 0);
   const totalCustomers = purchaseHistory.length;
+  const sortedPurchaseHistory = [...purchaseHistory].reverse();
 
   const columns = [
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+    },
     {
       title: 'Customer',
       dataIndex: 'customer',
@@ -33,11 +40,6 @@ const DashboardPage = () => {
       render: (text, record) => (
         <span>{record.menuItem.map((item) => item.namaResto).join(', ')}</span>
       ),
-    },
-    {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
     },
   ];
 
@@ -107,6 +109,16 @@ const DashboardPage = () => {
         borderWidth: 1,
       },
     ],
+    options : {
+      plugins : {
+        legend : {
+          display : true,
+          labels : {
+            color: 'rgb(255, 99, 132)',
+          }
+        }
+      }
+    },
   };
 
   //QUANTITY CHART
@@ -158,24 +170,24 @@ const DashboardPage = () => {
   return (
     <div className='grid grid-flow-row gap-10'>
       <Typography.Title>Dashboard</Typography.Title>
-      <div className='grid grid-cols-2 gap-5'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
         <div className='grid grid-cols-1 gap-2'>
-          <CardDashboard title={"Revenue"} value={`Rp. ${totalRevenue}`} icon={<WalletOutlined />} />
+          <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
           <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
           <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
         </div>
         <div className='border p-5 rounded-md'>
           <h3 className='text-xl'>Latest Purchase</h3>
-          <Table columns={columns} dataSource={purchaseHistory} pagination={{ pageSize: 3 }} />
+          <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
         </div>
       </div>
       <div className='space-y-5'>
         <h1 className='text-xl'>Overview</h1>
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='border p-5 rounded-md'>
+        <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
+          <div className='border p-5 rounded-md flex items-center justify-center'>
             <BarChart data={barChartData} />
           </div>
-          <div className='border p-5 rounded-md'>
+          <div className='border p-5 rounded-md items-center justify-center'>
             <PieChart data={pieChartData} />
           </div>
         </div>

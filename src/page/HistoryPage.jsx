@@ -3,6 +3,7 @@ import { Table, Button, Typography, Modal } from 'antd';
 import { useSelector } from 'react-redux';
 import CardCart from '../component/CardCart';
 import ListMenuCart from '../component/ListMenuCart';
+import { formatRupiah } from '../util/format';
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
@@ -32,11 +33,14 @@ const HistoryPage = () => {
       title: 'Total',
       dataIndex: 'total',
       key: 'total',
+      render: (text, record) => (
+        <span>{formatRupiah(record.total)}</span>
+      ),
     },
     {
       title: 'Action',
       key: 'action',
-      render: (text, record, index) => (
+      render: (record) => (
         <div>
           <Button onClick={() => handleDetail(record)}>Detail</Button>
         </div>
@@ -86,7 +90,7 @@ const HistoryPage = () => {
                         ))}
               </CardCart>
             ))}
-            <p><strong>Total: </strong><span className='text-primary font-bold'>{detail.total}</span></p>            
+            <p><strong>Total: </strong><span className='text-primary font-bold'>{formatRupiah(detail.total)}</span></p>            
           </div>
         )}
       </Modal>

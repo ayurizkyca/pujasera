@@ -5,19 +5,21 @@ import { useParams } from 'react-router-dom'
 import { Typography } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { cartActions } from '../redux/cart.js'
+import { message } from 'antd/es/index.js'
 
 
 const RestoMenuPage = () => {
     const { id } = useParams();
     const resto = restoData.find((r) => r.id === id);
     const dispatch = useDispatch();
-    const isCustExist = useSelector((state) => state.cart.isCustEmpty)
+    const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
     
     const addToCartHandler = (idResto, namaResto, id, name, price) => {
-        if (isCustExist === true) {
+        if (isCustEmpty === true) {
             dispatch(cartActions.toggleDrawer(false));
         } else {
             dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
+            message.success("item added");
         }
     };
 
