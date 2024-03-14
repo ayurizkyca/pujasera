@@ -7,10 +7,16 @@ import { formatRupiah } from '../util/format';
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
+  const purchaseDataSorted = [...purchaseHistory].reverse();
   const [detailVisible, setDetailVisible] = useState(false);
   const [detail, setDetail] = useState(""); 
 
   const columns = [
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+    },
     {
       title: 'Customer',
       dataIndex: 'customer',
@@ -56,7 +62,7 @@ const HistoryPage = () => {
   return (
     <div>
       <Typography.Title>History Page</Typography.Title>
-      <Table columns={columns} dataSource={purchaseHistory} pagination={{pageSize:5}} />
+      <Table columns={columns} dataSource={purchaseDataSorted} pagination={{pageSize:5}} />
       <Modal
         title="Order Detail"
         open={detailVisible}
