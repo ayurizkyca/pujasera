@@ -8,6 +8,7 @@ import { cartActions } from '../redux/cart';
 import { Modal, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constant/routesConstant';
+import { formatRupiah } from '../util/format';
 
 const CartPage = () => {
     const menuItem = useSelector(state => state.cart.menuItem);
@@ -78,7 +79,7 @@ const CartPage = () => {
                 ))}
             </ul>
             <div className='sticky bottom-0 bg-white border-t border-primary p-4 flex justify-between items-center'>
-                <h3 className=''>Total ({cartItemCount}) product : <span className='font-bold text-2xl text-primary'>Rp. {total}</span></h3>
+                <h3 className=''>Total ({cartItemCount}) product : <span className='font-bold text-2xl text-primary'>{formatRupiah(total)}</span></h3>
                 <ButtonBasic className="" title={"checkout"} onClick={showModal} />
             </div>
             <Modal title="Checkout" open={isModalOpen} onOk={handleCheckout} onCancel={handleCancel} okType='danger'>
