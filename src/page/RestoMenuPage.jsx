@@ -17,6 +17,7 @@ const RestoMenuPage = () => {
     const addToCartHandler = (idResto, namaResto, id, name, price) => {
         if (isCustEmpty === true) {
             dispatch(cartActions.toggleDrawer(false));
+            dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
         } else {
             dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
             message.success("item added");
