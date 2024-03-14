@@ -3,6 +3,7 @@ import { Collapse } from 'antd';
 import CardCart from './CardCart';
 import ListMenuCart from './ListMenuCart';
 import { useSelector } from 'react-redux';
+import { formatRupiah } from '../util/format';
 
 const { Panel } = Collapse;
 
@@ -33,8 +34,8 @@ const Accordion = () => {
                   </CardCart>
                 ))}
               </ul>
-              <p>Subtotal: {purchase.subtotal}</p>
-              <p>Total: {purchase.total}</p>
+              <p>Subtotal: {formatRupiah(purchase.subtotal)}</p>
+              <p>Total: {formatRupiah(purchase.total)}</p>
             </div>
           </Panel>
         ))}
@@ -52,13 +53,13 @@ const generateHeader = (purchase) => {
   const totalMenu = purchase.menuItem.reduce((total, resto) => total + resto.menu.length, 0);
 
   return(
-    <div className='grid grid-cols-6 gap-10'>
-      <p>Date : {date}</p>
-      <p>Customer : {customer}</p>
+    <div className='grid grid-cols-6'>
+      <p>{date}</p>
+      <p>{customer}</p>
       <p>Table : {meja}</p>
       <p>Items : {totalMenu}</p>
       <p>Restos : {restos}</p>
-      <p>Total : Rp.{total}</p>
+      <p>{formatRupiah(total)}</p>
     </div>
   )
 };
