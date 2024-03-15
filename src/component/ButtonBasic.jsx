@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'antd';
 
-const ButtonBasic = ({title, onClick}) => (
+const ButtonBasic = ({title, onClick, color, textColor}) => (
   <div className="">
-    <Button onClick={() => onClick() } className='bg-primary text-white w-full font-bold'>{title}</Button>
+    <Button onClick={() => onClick() } className={`bg-${color} text-${textColor} w-full font-bold border-primary`}>{title}</Button>
   </div>
 );
 
