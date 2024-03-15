@@ -2,15 +2,24 @@ import React from 'react';
 import { Card } from 'antd';
 
 
-const CardResto = ({ id, title, description, onClick }) => (
+const CardResto = ({ id, title, description, onClick, bgImage }) => (
     <Card
         onClick={() => onClick(id)
         }
         hoverable
-        title={title}
+        title={<span style={{ 
+            fontSize: 20, 
+            fontWeight: 'bold', 
+            color: 'white'
+        }}>
+            {title}
+        </span>} 
         bordered={false}
         style={{
+            color : 'white',
             width: 300,
+            backgroundImage: `linear-gradient(rgba(194, 0, 0, 0.6), rgba(194, 22, 30, 0.5)),url(${bgImage})`,
+            backgroundSize: 'cover',
         }}
     >
         <p>{description}</p>
