@@ -12,10 +12,10 @@ export default function LoginPage() {
                 <div className='h-screen px-10 lg:col-span-2 space-y-5 flex flex-col justify-center items-center'>
                     <div className='flex flex-col items-center'>
                         <img src={ImagePujasera} alt="logo-pujasera" className='mb-[20px]' />
-                        <h1 className='text-3xl font-bold text-red-700'>Welcome Back!</h1>
+                        <h1 className='text-xl font-bold text-red-700'>Welcome Back!</h1>
                         <p>Happy to See You Again</p>
                     </div>
-                    <div className='flex justify-center w-full items-center'>
+                    <div className='flex justify-center w-[25vw] items-center'>
                         <FormBasic></FormBasic>
                     </div>
                 </div>
