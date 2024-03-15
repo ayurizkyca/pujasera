@@ -3,6 +3,8 @@ import { ShoppingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ListMenuCart from './ListMenuCart';
 import { cartActions } from '../redux/cart';
+import { Modal, message } from 'antd';
+
 
 const CardCart = () => {
     const listMenu = useSelector((state) => state.cart.menuItem);
@@ -10,7 +12,6 @@ const CardCart = () => {
 
     const incrementQuantity = (idResto, idMenu) => {
         dispatch(cartActions.incrementQuantity({ idResto, idMenu }));
-        console.log("hayyuuuu tambah", idResto, idMenu);
     };
 
     const decrementQuantity = (idResto, idMenu) => {
@@ -18,11 +19,9 @@ const CardCart = () => {
     };
     
     const deleteItem = (idResto, idMenu) => {
-        // console.log("delete item")
-        // dispatch(cartActions.deleteCustomer({ idResto, idMenu }));
         dispatch(cartActions.deleteMenu({ idResto, idMenu }))
     }
-
+    
     return (
         <div>
             <div className='rounded-md px-5 py-2 m-5 space-y-3'>
@@ -48,9 +47,6 @@ const CardCart = () => {
                         </div>
                     ))}
                 </ul>
-                <div className='flex flex-col'>
-
-                </div>
             </div>
         </div>
     );
