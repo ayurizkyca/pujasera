@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Table, Button, Typography, Modal, Tooltip } from 'antd';
 import { useSelector } from 'react-redux';
-import CardCart from '../component/CardCart';
-import ListMenuCart from '../component/ListMenuCart';
 import { formatRupiah } from '../util/format';
+import { ShoppingOutlined } from '@ant-design/icons';
+import ButtonBasic from '../component/ButtonBasic';
+import { COLORS } from '../constant/propertiesConstant';
+
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
@@ -16,6 +18,9 @@ const HistoryPage = () => {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      style : {
+        background : COLORS.PRIMARY
+      }
     },
     {
       title: 'Customer',
@@ -52,7 +57,7 @@ const HistoryPage = () => {
       key: 'action',
       render: (record) => (
         <div>
-          <Button onClick={() => handleDetail(record)}>Detail</Button>
+          <ButtonBasic textColor={"primary"} color={"secondary"} title={"Detail"} onClick={() => handleDetail(record)}/>
         </div>
       ),
     },
@@ -65,7 +70,7 @@ const HistoryPage = () => {
 
   return (
     <div>
-      <Typography.Title>History Page</Typography.Title>
+      <Typography.Title level={3}>History</Typography.Title>
       <div className='overflow-auto'>
         <Table columns={columns} dataSource={purchaseDataSorted} pagination={{ pageSize: 5 }} />
       </div>
@@ -74,6 +79,7 @@ const HistoryPage = () => {
         open={detailVisible}
         onCancel={() => setDetailVisible(false)}
         footer={[
+          // <ButtonBasic textColor={"primary"} color={"secondary"} title={"Close"} onClick={() => setDetailVisible(false)}/>,
           <Button key="close" onClick={() => setDetailVisible(false)}>
             Close
           </Button>,
@@ -85,24 +91,28 @@ const HistoryPage = () => {
             <p><strong>Table:</strong> {detail.meja}</p>
             <p><strong>Orders : </strong></p>
             {detail.menuItem.map(resto => (
-              <CardCart
-                key={resto.idResto}
-                namaResto={resto.namaResto}
-              >
+              <div className='border p-4' key={resto.idResto}>
+                <div className='flex gap-2'>
+                  <ShoppingOutlined />
+                  <h1 className='font-medium'>{resto.namaResto}</h1>
+                </div>
                 {resto.menu.map(menu => (
-                  <ListMenuCart
-                    key={menu.id}
-                    namaMenu={menu.namaMenu}
-                    harga={menu.harga}
-                    qty={menu.qty}
-                    subTotal={menu.qty * menu.harga}
-                    incrementClick={() => incrementQuantity(resto.id, menu.id)}
-                    decrementClick={() => decrementQuantity(resto.id, menu.id)}
-                  />
+                  <div className='grid grid-cols-3 gap-3'>
+                    <h2 className='col-span-1'>{menu.namaMenu}</h2>
+                    <div className='col-span-2'>
+                      <div className='grid grid-cols-3'>
+                        <h2 className=''>{formatRupiah(menu.harga)}</h2>
+                        <div className='text-center'>
+                          <h2>{menu.qty}</h2>
+                        </div>
+                        <h2 className='font-semibold text-primary'> {formatRupiah(menu.harga * menu.qty)}</h2>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </CardCart>
+              </div>
             ))}
-            <p><strong>Total: </strong><span className='text-primary font-bold'>{formatRupiah(detail.total)}</span></p>
+            <p><strong>Total: </strong><span className='text-primary font-bold'> {formatRupiah(detail.total)}</span></p>
           </div>
         )}
       </Modal>

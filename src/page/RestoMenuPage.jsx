@@ -27,7 +27,7 @@ const RestoMenuPage = () => {
 
     return (
         <>
-            <Typography.Title>{resto?.title}</Typography.Title>
+            <Typography.Title level={3}>{resto?.title}</Typography.Title>
             <div className='flex flex-wrap gap-3'>
                 {resto?.menus.map(card => (
                     <CardMenu

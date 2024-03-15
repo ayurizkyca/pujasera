@@ -6,7 +6,7 @@ const ReportPage = () => {
 
   return (
     <div className='space-y-2'>
-      <Typography.Title>Report Page</Typography.Title>
+      <Typography.Title level={3}>Report</Typography.Title>
       <div className='overflow-auto'>
         <Accordion />
       </div>

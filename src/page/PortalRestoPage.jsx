@@ -14,7 +14,7 @@ const PortalRestoPage = () => {
 
     return (
         <>
-            <Typography.Title>Portal Resto</Typography.Title>
+            <Typography.Title level={3}>Portal Resto</Typography.Title>
             <div className='flex flex-wrap gap-3'>
                 {restoData.map(card => (
                     <CardResto
@@ -23,6 +23,7 @@ const PortalRestoPage = () => {
                         description={card.description}
                         onClick={handleRestoClick}
                         id={card.id}
+                        bgImage={card.bgImage}
                     />
                 ))}
             </div>

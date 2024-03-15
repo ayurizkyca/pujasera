@@ -92,20 +92,16 @@ const DashboardPage = () => {
         label: 'Revenue',
         data: Object.values(revenueData),
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          '#C2161E',
+          '#A0153E',
+          '#5D0E41',
+          '#5D0E41',
+          '#430A5D',
+          '#5F374B',
+          '#8C6A5D',
+          '#EEE4B1',
+          '#222831',
+          '#31363F'
         ],
         borderWidth: 1,
       },
@@ -148,19 +144,18 @@ const DashboardPage = () => {
       {
         label: 'Quantity Orders',
         data: Object.values(quantityData),
+        color: '[]',
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
+          '#C2161E',
+          '#A0153E',
+          '#5D0E41',
+          '#5D0E41',
+          '#430A5D',
+          '#5F374B',
+          '#8C6A5D',
+          '#EEE4B1',
+          '#222831',
+          '#31363F'
         ],
         borderWidth: 1,
       },
@@ -169,32 +164,47 @@ const DashboardPage = () => {
 
 
   return (
-    <div className='grid grid-flow-row gap-10'>
-      <Typography.Title>Dashboard</Typography.Title>
+    <div className='grid grid-flow-row gap-2'>
+      <Typography.Title level={3}>Dashboard</Typography.Title>
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
-        <div className='grid grid-cols-1 gap-2'>
+        <div className='grid grid-cols-3 gap-2'>
           <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
           <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
           <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
         </div>
-        <div className='border p-5 rounded-md'>
-          <div className='flex items-center gap-3'>
-            <TagsOutlined />
-            <h3 className='text-xl'>Latest Purchase</h3>
-          </div>
-          <div className='overflow-auto'>
-            <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
-          </div>
-        </div>
+
       </div>
       <div className='space-y-5'>
         <h1 className='text-xl'>Overview</h1>
         <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
-          <div className='border p-5 rounded-md flex items-center justify-center'>
-            <BarChart data={barChartData} />
+          <div className='border rounded-md p-5'>
+            <div className='flex items-center gap-3'>
+              <TagsOutlined />
+              <h3 className='text-sm'>Latest Purchase</h3>
+            </div>
+            <div className='p-5 flex items-center justify-center'>
+              <BarChart data={barChartData} />            </div>
           </div>
-          <div className='border p-5 rounded-md flex items-center justify-center'>
-            <PieChart data={pieChartData} />
+
+          {/* pie chart card */}
+          <div className='border rounded-md p-5'>
+            <div className='flex items-center gap-3'>
+              <TagsOutlined />
+              <h3 className='text-sm'>Latest Purchase</h3>
+            </div>
+            <div className='p-5 flex items-center justify-center'>
+              <PieChart data={pieChartData} />
+            </div>
+          </div>
+
+          <div className='border p-5 rounded-md'>
+            <div className='flex items-center gap-3'>
+              <TagsOutlined />
+              <h3 className='text-sm'>Latest Purchase</h3>
+            </div>
+            <div className='overflow-auto'>
+              <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
+            </div>
           </div>
         </div>
       </div>
