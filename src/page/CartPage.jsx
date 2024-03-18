@@ -27,7 +27,7 @@ const CartPage = () => {
         }, 800)
     }
 
-    //modal
+    //modal checkout
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
         if (total > 0) {
@@ -39,6 +39,10 @@ const CartPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+    const handleToPortal = () => {
+        navigate(ROUTES.PORTAL_RESTO)
+    }
 
     return (
         <div className='h-screen flex flex-col'>
@@ -53,14 +57,17 @@ const CartPage = () => {
                 <h1 className='text-xl font-medium'>Table : {meja}</h1>
             </div>
             <ul className='flex-grow'>
-                <CardCart/>
+                <CardCart />
             </ul>
             <div className='sticky bottom-0 bg-white border-t border-primary p-4 flex justify-between items-center'>
-                <div className='md:flex md:items-center'>
-                <h3 className=''>Total ({cartItemCount}) product :</h3>
-                <h3 className='font-bold text-2xl text-primary'>{formatRupiah(total)}</h3>
+                <div className='md:flex md:items-center md:justify-center'>
+                    <h3 className=''>Grand Total : </h3>
+                    <h3 className='font-bold text-2xl text-primary'> {formatRupiah(total)}</h3>
                 </div>
-                <ButtonBasic className="" title={"checkout"} onClick={showModal} />
+                <div className='flex gap-2'>
+                    <ButtonBasic color={"secondary"} title={"Cancel"} onClick={handleToPortal} textColor={"primary"}/>
+                    <ButtonBasic color={"primary"} title={"Checkout"} onClick={showModal} textColor={"white"} />
+                </div>
             </div>
             <Modal title="Checkout" open={isModalOpen} onOk={handleCheckout} onCancel={handleCancel} okType='danger'>
                 <p>Please ensure your order is correct. Proceed to checkout now?</p>

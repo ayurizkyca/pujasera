@@ -17,7 +17,7 @@ const ListMenuCart = ({ namaMenu, harga, qty, subTotal, incrementClick, decremen
                     <h2>{qty}</h2>
                     <PlusCircleOutlined onClick={incrementClick} />
                 </div>
-                <h2 className='font-semibold text-primary'>{formatRupiah(subTotal)}</h2>
+                <h2 className='font-semibold'>{formatRupiah(subTotal)}</h2>
                 <div className='flex justify-end'>
                     <DeleteOutlined onClick={deleteItemClick} />
                 </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Collapse, Tooltip } from 'antd';
-import CardCart from './CardCart';
-import ListMenuCart from './ListMenuCart';
 import { useSelector } from 'react-redux';
 import { formatRupiah } from '../util/format';
+import { ShoppingOutlined } from '@ant-design/icons';
+
 
 const { Panel } = Collapse;
 
@@ -21,21 +21,36 @@ const Accordion = () => {
               <p>Table: {purchase.meja}</p>
               <ul>
                 {purchase.menuItem.map((resto, restoIndex) => (
-                  <CardCart key={restoIndex} namaResto={resto.namaResto}>
-                    {resto.menu.map((menu, menuIndex) => (
-                      <ListMenuCart
-                        key={menuIndex}
-                        namaMenu={menu.namaMenu}
-                        harga={menu.harga}
-                        qty={menu.qty}
-                        subTotal={menu.qty * menu.harga}
-                      />
+                  <div className='border p-4' key={resto.idResto}>
+                    <div className='flex gap-2'>
+                      <ShoppingOutlined />
+                      <h1 className='font-medium'>{resto.namaResto}</h1>
+                    </div>
+                    {resto.menu.map(menu => (
+                      <div className='grid grid-cols-3 gap-3'>
+                        <h2 className='col-span-1'>{menu.namaMenu}</h2>
+                        <div className='col-span-2'>
+                          <div className='grid grid-cols-3'>
+                            <h2 className=''>{formatRupiah(menu.harga)}</h2>
+                            <div className='text-center'>
+                              <h2>{menu.qty}</h2>
+                            </div>
+                            <h2 className='font-semibold text-end'>{formatRupiah(menu.harga * menu.qty)}</h2>
+                          </div>
+                        </div>
+                      </div>
                     ))}
-                  </CardCart>
+                  <div className='flex justify-between'>
+                    <h1 className='font-semibold'>Total Resto :</h1>
+                    <h1 className='font-semibold text-primary'>{formatRupiah(resto.subtotal)}</h1>
+                  </div>
+                  </div>
                 ))}
               </ul>
-              <p>Subtotal: {formatRupiah(purchase.subtotal)}</p>
-              <p>Total: {formatRupiah(purchase.total)}</p>
+              <div className='flex justify-end gap-2 p-2'>
+                <p className='font-bold'>Grand Total: </p>
+                <p className='font-bold text-primary'>{formatRupiah(purchase.total)}</p>
+              </div>
             </div>
           </Panel>
         ))}
@@ -49,17 +64,19 @@ const generateHeader = (purchase) => {
   const customer = purchase.customer;
   const meja = purchase.meja;
   const total = purchase.total;
+  const qty = purchase.menuItem.reduce((acc, resto) => acc + resto.menu.reduce((acc, item) => acc + item.qty, 0), 0);
   const restos = purchase.menuItem.map((resto) => resto.namaResto).join(', ');
   const totalMenu = purchase.menuItem.reduce((total, resto) => total + resto.menu.length, 0);
 
   return (
-    <div className='grid grid-cols-6 gap-10'>
+    <div className='grid grid-cols-7 gap-10'>
       <p>{date}</p>
       <p>{customer}</p>
-      <p>Table : {meja}</p>
-      <p>Items : {totalMenu}</p>
+      <p className='text-center'>{meja}</p>
+      <p className='text-center'>{totalMenu}</p>
+      <p className='text-center'>{qty}</p>
       <Tooltip title={restos} trigger="hover">
-        <p className='truncate'>Restos : {restos}</p>
+        <p className='truncate'>{restos}</p>
       </Tooltip>
       <p>{formatRupiah(total)}</p>
     </div>
