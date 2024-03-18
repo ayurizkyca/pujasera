@@ -20,6 +20,7 @@ const CardResto = ({ id, title, description, onClick, bgImage }) => (
             width: 300,
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 22, 30, 0.5)),url(${bgImage})`,
             backgroundSize: 'cover',
+            
         }}
     >
         <p>{description}</p>
