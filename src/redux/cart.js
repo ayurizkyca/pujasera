@@ -5,7 +5,6 @@ const initialCartState = {
     meja: "",
     isCustEmpty: true,
     menuItem: [],
-    subtotal: 0,
     total: 0,
     isDrawerOpen: false,
     purchaseHistory: [],
@@ -29,21 +28,21 @@ const cartSlice = createSlice({
 
                     if (existingMenuIndex !== -1) {
                         existingResto.menu[existingMenuIndex].qty += qty;
-                        state.subtotal += harga * qty;
                     } else {
                         existingResto.menu.push({ idMenu, namaMenu, harga, qty });
-                        state.subtotal += harga * qty;
                     }
+                    existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
                 } else {
                     const newResto = {
                         idResto,
                         namaResto,
                         menu: [{ idMenu, namaMenu, harga, qty }],
+                        subtotal: harga * qty
+
                     };
                     state.menuItem.push(newResto);
-                    state.subtotal += harga * qty;
                 }
-                state.total = state.subtotal;
+                state.total = state.menuItem.reduce((acc, resto) => acc + resto.subtotal, 0);
             }
             state.pendingAddToCart = null;
         },
@@ -54,7 +53,6 @@ const cartSlice = createSlice({
             state.pendingAddToCart = null;
             state.menuItem = [];
             state.total = 0;
-            state.subtotal = 0;
         },
         deleteMenu(state, action) {
             const { idResto, idMenu } = action.payload;
@@ -63,11 +61,12 @@ const cartSlice = createSlice({
                 const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
                 if (menuItemIndex !== -1) {
                     const deletedItem = resto.menu.splice(menuItemIndex, 1)[0];
-                    state.subtotal -= deletedItem.harga * deletedItem.qty;
+                    resto.subtotal -= deletedItem.harga * deletedItem.qty;
                     state.total -= deletedItem.harga * deletedItem.qty;
                 }
             }
         },
+
         addMenuItem(state, action) {
             if (state.isCustEmpty) {
                 state.pendingAddToCart = action.payload;
@@ -80,40 +79,28 @@ const cartSlice = createSlice({
 
                     if (existingMenuIndex !== -1) {
                         existingResto.menu[existingMenuIndex].qty += qty;
-                        state.subtotal += harga * qty;
                     } else {
                         existingResto.menu.push({ idMenu, namaMenu, harga, qty });
-                        state.subtotal += harga * qty;
                     }
+                    // Hitung ulang subtotal untuk restoran yang berubah
+                    existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
                 } else {
                     const newResto = {
                         idResto,
                         namaResto,
                         menu: [{ idMenu, namaMenu, harga, qty }],
+                        subtotal: harga * qty
                     };
                     state.menuItem.push(newResto);
-                    state.subtotal += harga * qty;
                 }
-                state.total = state.subtotal;
+                // Hitung ulang total keseluruhan
+                state.total = state.menuItem.reduce((acc, resto) => acc + resto.subtotal, 0);
             }
         },
+
         toggleDrawer(state) {
             state.isDrawerOpen = !state.isDrawerOpen;
         },
-
-        // incrementQuantity(state, action) {
-        //     const { idResto, idMenu } = action.payload;
-
-        //     const restoIndex = state.menuItem.findIndex(resto => resto.idResto === idResto);
-        //     if (restoIndex !== -1) {
-        //       const itemIndex = state.menuItem[restoIndex].menu.findIndex(item => item.idMenu === idMenu);
-        //       if (itemIndex !== -1) {
-        //         state.menuItem[restoIndex].menu[itemIndex].qty += 1;
-        //         state.menuItem[restoIndex].menu[itemIndex].subtotal += state.menuItem[restoIndex].menu[itemIndex].harga;
-        //         state.menuItem[restoIndex].total += state.menuItem[restoIndex].menu[itemIndex].harga;
-        //       }
-        //     }
-        //   },
 
         incrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
@@ -123,8 +110,7 @@ const cartSlice = createSlice({
                 if (menuItem) {
                     menuItem.qty += 1;
                     menuItem.subtotal += menuItem.harga;
-                    resto.total += menuItem.harga;
-                    state.subtotal += menuItem.harga;
+                    resto.subtotal += menuItem.harga;
                     state.total += menuItem.harga;
                 }
             }
@@ -135,11 +121,10 @@ const cartSlice = createSlice({
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
             if (resto) {
                 const menuItem = resto.menu.find(item => item.idMenu === idMenu);
-                if (menuItem.qty > 1) {
+                if (menuItem.qty > 0) {
                     menuItem.qty -= 1;
                     menuItem.subtotal -= menuItem.harga;
-                    resto.total -= menuItem.harga;
-                    state.subtotal -= menuItem.harga;
+                    resto.subtotal -= menuItem.harga;
                     state.total -= menuItem.harga;
                 }
             }
@@ -154,7 +139,6 @@ const cartSlice = createSlice({
                     customer: state.customer,
                     meja: state.meja,
                     menuItem: state.menuItem,
-                    subtotal: state.subtotal,
                     total: state.total,
                 });
             }
@@ -162,7 +146,6 @@ const cartSlice = createSlice({
             state.meja = "";
             state.isCustEmpty = true;
             state.menuItem = [];
-            state.subtotal = 0;
             state.total = 0;
         },
         removePurchase(state, action) {
@@ -171,7 +154,6 @@ const cartSlice = createSlice({
         },
     }
 });
-
 
 export const cartActions = cartSlice.actions;
 export default cartSlice.reducer;
