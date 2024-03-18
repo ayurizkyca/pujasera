@@ -24,7 +24,7 @@ const Auth = () => {
             message.success("Welcome Back!")
             dispatch(authActions.login(user));
             setTimeout(() => {
-                navigate(ROUTES.HOME);
+                navigate(ROUTES.PORTAL_RESTO);
             }, 500)
             
         } else {

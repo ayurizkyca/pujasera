@@ -12,6 +12,7 @@ import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate, Link } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
+import { COLORS } from '../constant/propertiesConstant'
 
 
 export default function Navbar() {
@@ -78,7 +79,13 @@ export default function Navbar() {
         navigate(ROUTES.CART);
     }
     const username = useSelector((state) => state.auth.username);
-    const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
+    // const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
+    const cartItemCount = useSelector((state) => {
+        return state.cart.menuItem.reduce((acc, resto) => {
+            return acc + resto.menu.reduce((acc, item) => acc + item.qty, 0);
+        }, 0);
+    });
+
 
     return (
         <>
@@ -96,7 +103,7 @@ export default function Navbar() {
                                 <p className='hidden md:flex'>{username}</p>
                                 <UserOutlined onClick={handleDrawerOpen} />
                             </div>
-                            <ButtonBasic title={"Logout"} onClick={showModal} />
+                            <ButtonBasic color={'primary'} title={"Logout"} onClick={showModal} textColor={'whitecolor'} />
                         </div>
                     </div>
                 </div>
@@ -120,7 +127,7 @@ export default function Navbar() {
                             label="Table"
                             name="meja"
                         >
-                            <Input onChange={onChange} value={customerData.meja} required type="number"/>
+                            <Input onChange={onChange} value={customerData.meja} required type="number" />
                         </Form.Item>
 
                         <Form.Item
@@ -149,7 +156,7 @@ export default function Navbar() {
                 <p>Are you sure want to exit?</p>
             </Modal>
             <Modal title="Delete Customer" open={modalDeleteOpen} onOk={handleDeleteCust} onCancel={handleCancelDelete} okType='danger'>
-                <p>Are you sure to delete customer?<br/> It will be delete your shopping card list</p>
+                <p>Are you sure to delete customer?<br /> It will be delete your shopping cart list</p>
             </Modal>
         </>
 

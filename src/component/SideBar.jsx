@@ -12,6 +12,7 @@ import { ROUTES } from '../constant/routesConstant';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Typography } from 'antd';
+import Navbar from './Navbar';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -27,8 +28,8 @@ const items = [
   getItem('Portal Resto', ROUTES.PORTAL_RESTO, <HomeOutlined />),
   getItem('History', ROUTES.HISTORY, <BookOutlined />),
   getItem('Stats', ROUTES.REPORT, <SnippetsOutlined />, [
-    getItem('Dashboard',ROUTES.DASHBOARD, <DashboardOutlined/> ),
-    getItem('Report',ROUTES.REPORT, <FileTextOutlined /> ),
+    getItem('Dashboard', ROUTES.DASHBOARD, <DashboardOutlined />),
+    getItem('Report', ROUTES.REPORT, <FileTextOutlined />),
   ]),
 ];
 
@@ -48,28 +49,32 @@ const SideBar = () => {
   const username = useSelector((state) => state.auth.username)
 
   return (
-    <Layout
+    <Layout className=""
       style={{
         minHeight: '100vh',
       }}
     >
-      <Sider className="sticky left-0 -z-1" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} theme='light'>
+      <Sider className="left-0 -z-1" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} theme='light'>
         <div className="demo-logo-vertical" />
-        <Menu className='sticky left-0 -z-1' defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleClick} />
+        <Menu className='sticky left-0' defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleClick} />
       </Sider>
-      <Layout>
+      <Layout className="">
         <Header className='flex items-center'
           style={{
             padding: 0,
             background: colorBgContainer,
-            minHeight:200,
+            minHeight: 80,
           }}
         >
-          <h1 className='pl-[20px] text-primary font-bold text-2xl z-1'>Hello, {username}. <br /> Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
+          <h1 className='pl-[20px] text-primary font-bold text-2xl z-1'>Hello, {username}. Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
         </Header>
+        {/* <Navbar/> */}
+        
         <Content
           style={{
             margin: '16px 16px',
+            height: "calc(100vh-64px)",
+            overflow: "auto"
           }}
         >
           <div

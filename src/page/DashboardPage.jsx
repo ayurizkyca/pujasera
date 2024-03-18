@@ -106,16 +106,16 @@ const DashboardPage = () => {
         borderWidth: 1,
       },
     ],
-    options: {
-      plugins: {
-        legend: {
-          display: true,
-          labels: {
-            color: 'rgb(255, 99, 132)',
-          }
-        }
-      }
-    },
+    // options: {
+    //   plugins: {
+    //     legend: {
+    //       display: true,
+    //       labels: {
+    //         color: 'rgb(255, 99, 132)',
+    //       }
+    //     }
+    //   }
+    // },
   };
 
   //QUANTITY CHART
@@ -166,14 +166,14 @@ const DashboardPage = () => {
   return (
     <div className='grid grid-flow-row gap-2'>
       <Typography.Title level={3}>Dashboard</Typography.Title>
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
+      {/* <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'> */}
         <div className='grid grid-cols-3 gap-2'>
           <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
           <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
           <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
         </div>
 
-      </div>
+      {/* </div> */}
       <div className='space-y-5'>
         <h1 className='text-xl'>Overview</h1>
         <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
