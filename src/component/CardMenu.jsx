@@ -4,7 +4,7 @@ const { Meta } = Card;
 import ButtonBasic from './ButtonBasic';
 import { formatRupiah } from '../util/format';
 
-const CardMenu = ({ name, description, imageUrl, price, onClick }) => {
+const CardMenu = ({ name, description, imageUrl, price, stock, onClick }) => {
 
   return (
     <div className=''>
@@ -23,8 +23,11 @@ const CardMenu = ({ name, description, imageUrl, price, onClick }) => {
               </Tooltip>
             }
             />
-            <h1 className='mt-5 font-bold text-xl text-end text-primary'>{formatRupiah(price)}</h1>
-            <ButtonBasic title={"add to cart"} onClick={onClick} textColor={'primary'} color={'secondary'} />
+            <div className='flex justify-between items-end'>
+              <h1>Stok : {stock}</h1>
+              <h1 className='font-bold text-sm text-primary'>{formatRupiah(price)}</h1>
+            </div>
+            <ButtonBasic title={"add to cart"} onClick={onClick} textColor={'whitecolor'} color={'secondary'} />
             {/* <Button className="bg-secondary text-primary w-full font-bold border-none hover:bg-primary">add to chart</Button> */}
           </div>
         </div>
