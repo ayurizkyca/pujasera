@@ -9,6 +9,8 @@ import {
   TeamOutlined,
   TrophyOutlined,
   TagsOutlined,
+  BarChartOutlined,
+  PieChartOutlined,
 } from '@ant-design/icons';
 import { formatRupiah } from '../util/format';
 
@@ -106,17 +108,7 @@ const DashboardPage = () => {
         borderWidth: 1,
       },
     ],
-    // options: {
-    //   plugins: {
-    //     legend: {
-    //       display: true,
-    //       labels: {
-    //         color: 'rgb(255, 99, 132)',
-    //       }
-    //     }
-    //   }
-    // },
-  };
+   };
 
   //QUANTITY CHART
   //quantity every resto
@@ -179,8 +171,8 @@ const DashboardPage = () => {
         <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
           <div className='border rounded-md p-5'>
             <div className='flex items-center gap-3'>
-              <TagsOutlined />
-              <h3 className='text-sm'>Latest Purchase</h3>
+              <BarChartOutlined />
+              <h3 className='text-sm'>Restaurant Revenue</h3>
             </div>
             <div className='p-5 flex items-center justify-center'>
               <BarChart data={barChartData} />            </div>
@@ -189,8 +181,8 @@ const DashboardPage = () => {
           {/* pie chart card */}
           <div className='border rounded-md p-5'>
             <div className='flex items-center gap-3'>
-              <TagsOutlined />
-              <h3 className='text-sm'>Latest Purchase</h3>
+              <PieChartOutlined />
+              <h3 className='text-sm'>Restaurant Sales Quantity Breakdown</h3>
             </div>
             <div className='p-5 flex items-center justify-center'>
               <PieChart data={pieChartData} />

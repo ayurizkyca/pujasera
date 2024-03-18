@@ -131,6 +131,8 @@ const HistoryPage = () => {
         title="Order Detail"
         open={detailVisible}
         onCancel={() => setDetailVisible(false)}
+        okType='danger'
+        onOk={() => setDetailVisible(false)}
       >
         {detail && (
           <div>
