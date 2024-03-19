@@ -103,7 +103,7 @@ export default function Navbar() {
                                 <p className='hidden md:flex'>{username}</p>
                                 <UserOutlined onClick={handleDrawerOpen} />
                             </div>
-                            <ButtonBasic color={'primary'} title={"Logout"} onClick={showModal} textColor={'whitecolor'} />
+                            <ButtonBasic color={'primary'} title={"Logout"} onClick={showModal} textColor={'white'} />
                         </div>
                     </div>
                 </div>
