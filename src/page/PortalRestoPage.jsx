@@ -1,9 +1,9 @@
 import React from 'react'
 import CardResto from '../component/CardResto.jsx'
-import { restoData } from '../../public/data/restoData.js'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant.jsx'
 import { Typography } from 'antd'
+import { useSelector } from 'react-redux'
 
 const PortalRestoPage = () => {
     const navigate = useNavigate();
@@ -11,6 +11,16 @@ const PortalRestoPage = () => {
     const handleRestoClick = (id) => {
         navigate(`${ROUTES.DETAIL_RESTO}/${id}`);
     }
+
+    const restos = useSelector((state) => state.menu.resto)
+    const restoData = restos.map(resto => {
+        return {
+            id: resto.id,
+            title: resto.title,
+            description: resto.description,
+            bgImage: resto.bgImage
+        }
+    })
 
     return (
         <>
@@ -26,7 +36,7 @@ const PortalRestoPage = () => {
                         bgImage={card.bgImage}
                     />
                 ))}
-            </div>
+            </div>          
         </>
 
     )
