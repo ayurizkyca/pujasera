@@ -12,10 +12,11 @@ import { menuActions } from '../redux/menu.js'
 
 const RestoMenuPage = () => {
     const { id } = useParams();
-    const resto = restoData.find((r) => r.id === id);
-    const restaurant = useSelector((state) => state.menu.resto);
+    // const resto = restoData.find((r) => r.id === id);
     const dispatch = useDispatch();
     const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
+    const resto = useSelector((state) => state.menu.resto);
+    const restoMenu = resto.find((r) => r.id === id);
 
     const addToCartHandler = (idResto, namaResto, id, name, price) => {
         if (isCustEmpty === true) {
@@ -32,24 +33,6 @@ const RestoMenuPage = () => {
         setIsAddMenuOpen(true);
     };
 
-    // const handleAddMenu = (values) => {
-    //     dispatch(
-    //         menuActions.addMenu({
-    //             idResto: id,
-    //             namaResto: resto.title,
-    //             id: Date.now().toString(), 
-    //             name: values.name,
-    //             description: values.description,
-    //             imageUrl: values.imageUrl,
-    //             price: parseFloat(values.price),
-    //             stock: parseInt(values.stock),
-    //             qty: 1,
-    //         })
-    //     );
-    //     setIsAddMenuOpen(false);
-    //     message.success('Menu added successfully!');
-    // };
-
     const [menuData, setMenuData] = useState({
         name: "",
         description: "",
@@ -65,14 +48,9 @@ const RestoMenuPage = () => {
         });
     };
 
-    // const handleAddMenu = (values) => {
-    //     dispatch(menuActions.addMenu(values));
-    //     message.success("succesfully add menu")
-    //     console.log(values)
-    // }
     const handleAddMenu = (values) => {
         dispatch(menuActions.addMenu({
-            idResto: id, // Anda mungkin perlu menyediakan ID restoran secara dinamis
+            idResto: id, 
             // menu: { ...menuData }
             menu: values
 
@@ -91,34 +69,27 @@ const RestoMenuPage = () => {
                     <ButtonBasic title={"Add Menu"} color={"secondary"} textColor={"primary"} onClick={showAddMenu} />
                 </div>
             </div>
-            <div className='flex flex-wrap gap-2'>
-                {resto?.menus.map(card => (
-                    <CardMenu
-                        key={card.id}
-                        name={card.name}
-                        description={card.description}
-                        imageUrl={card.imageUrl}
-                        id={card.id}
-                        price={card.price}
-                        stock={card.stock}
-                        onClick={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
-                    />
-                ))}
+            <div>
+                {restoMenu && (
+                    <div>
+                        <Typography.Title level={3}>Menu Resto</Typography.Title>
+                        <div className='flex flex-wrap gap-2'>
+                            {restoMenu.menus.map(card => (
+                                <CardMenu
+                                    key={card.id}
+                                    name={card.name}
+                                    description={card.description}
+                                    imageUrl={card.imageUrl}
+                                    id={card.id}
+                                    price={card.price}
+                                    stock={card.stock}
+                                    onClick={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
-            {/* <div className='flex flex-wrap gap-2'>
-                {restaurant?.menus.map(card => (
-                    <CardMenu
-                        key={card.id}
-                        name={card.name}
-                        description={card.description}
-                        imageUrl={card.imageUrl}
-                        id={card.id}
-                        price={card.price}
-                        stock={card.stock}
-                        onClick={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
-                    />
-                ))}
-            </div> */}
             <Modal title="Add Menu Resto" open={isAddMenuOpen} okType='danger' onCancel={() => setIsAddMenuOpen(false)}>
                 <Form className='m-2 mt-5'
                     name="basic"
