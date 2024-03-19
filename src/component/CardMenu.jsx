@@ -5,6 +5,15 @@ import ButtonBasic from './ButtonBasic';
 import { formatRupiah } from '../util/format';
 
 const CardMenu = ({ name, description, imageUrl, price, stock, onClick }) => {
+  // const addToCartHandler = (idResto, namaResto, id, name, price) => {
+  //   if (isCustEmpty === true) {
+  //     dispatch(cartActions.toggleDrawer(false));
+  //     dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
+  //   } else {
+  //     dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
+  //     message.success("item added");
+  //   }
+  // };
 
   return (
     <div className=''>
@@ -27,7 +36,7 @@ const CardMenu = ({ name, description, imageUrl, price, stock, onClick }) => {
               <h1>Stok : {stock}</h1>
               <h1 className='font-bold text-sm text-primary'>{formatRupiah(price)}</h1>
             </div>
-            <ButtonBasic title={"add to cart"} onClick={onClick} textColor={'whitecolor'} color={'secondary'} />
+            <ButtonBasic title={"add to cart"} onClick={onClick} textColor={'primary'} color={'secondary'} />
             {/* <Button className="bg-secondary text-primary w-full font-bold border-none hover:bg-primary">add to chart</Button> */}
           </div>
         </div>
