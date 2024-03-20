@@ -11,13 +11,17 @@ import {
   TagsOutlined,
   BarChartOutlined,
   PieChartOutlined,
+  RestOutlined,
 } from '@ant-design/icons';
 import { formatRupiah } from '../util/format';
+import menu from '../redux/menu';
 
 const DashboardPage = () => {
   const purchaseHistory = useSelector(state => state.cart.purchaseHistory);
+  const restos = useSelector((state) =>state.menu.resto)
   const totalRevenue = purchaseHistory.reduce((total, purchase) => total + purchase.total, 0);
   const totalCustomers = purchaseHistory.length;
+  const totalResto = restos.length;
   const sortedPurchaseHistory = [...purchaseHistory].reverse();
 
   const columns = [
@@ -159,8 +163,9 @@ const DashboardPage = () => {
     <div className='grid grid-flow-row gap-2'>
       <Typography.Title level={3}>Dashboard</Typography.Title>
       {/* <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'> */}
-        <div className='grid grid-cols-3 gap-2'>
+        <div className='grid grid-cols-4 gap-2'>
           <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
+          <CardDashboard title={"Total Restaurants"} value={totalResto} icon={<RestOutlined />}/>
           <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
           <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
         </div>
@@ -189,7 +194,7 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          <div className='border p-5 rounded-md'>
+          {/* <div className='border p-5 rounded-md'>
             <div className='flex items-center gap-3'>
               <TagsOutlined />
               <h3 className='text-sm'>Latest Purchase</h3>
@@ -197,7 +202,7 @@ const DashboardPage = () => {
             <div className='overflow-auto'>
               <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
