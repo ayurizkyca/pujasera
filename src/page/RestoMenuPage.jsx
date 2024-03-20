@@ -1,24 +1,108 @@
 import React, { useState } from 'react'
 import CardMenu from '../component/CardMenu.jsx'
-import { restoData } from '../../public/data/restoData.js'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Typography, Modal, Form, Input, message, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { cartActions } from '../redux/cart.js'
 import ButtonBasic from '../component/ButtonBasic.jsx'
 import UploadCustom from '../component/UploadCustom.jsx'
 import { menuActions } from '../redux/menu.js'
+import {
+    ArrowLeftOutlined,
+} from '@ant-design/icons';
+import { ROUTES } from '../constant/routesConstant.jsx'
 
 
 const RestoMenuPage = () => {
     const { id } = useParams();
-    // const resto = restoData.find((r) => r.id === id);
     const dispatch = useDispatch();
     const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
-    const resto = useSelector((state) => state.menu.resto);
-    const restoMenu = resto.find((r) => r.id === id);
+    const restos = useSelector((state) => state.menu.resto);
+    const resto = restos.find((resto) => resto.id === id);
+    const [menuToDelete, setMenuToDelete] = useState(null);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [menuToEdit, setMenuToEdit] = useState(null);
+    const [form] = Form.useForm();
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
+    // Delete Menu
+    const showDeleteConfirm = (card) => {
+        setMenuToDelete(card);
+        setIsModalDeleteOpen(true);
+        console.log("card", menuToDelete)
+    };
+
+    const handleOkDelete = () => {
+        if (menuToDelete) {
+            dispatch(menuActions.deleteMenu({ idResto: id, idMenu: menuToDelete.id }));
+            setIsModalDeleteOpen(false);
+            setMenuToDelete(null);
+        }
+    }
+
+    const handleCancelDelete = () => {
+        setIsModalDeleteOpen(false);
+    };
+
+    // Edit Menu
+    // const [menuToEdit, setMenuToEdit] = useState({
+    //     id: null,
+    //     name: "",
+    //     description: "",
+    //     imageUrl: "",
+    //     price: "",
+    //     stock: ""
+    // })
+
+    const onChangeEdit = (e) => {
+        setMenuToEdit({
+            ...menuToEdit,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const showModalEdit = (card) => {
+        setIsModalEditOpen(true);
+        // setMenuToEdit(card)
+        setMenuToEdit({ ...card });
+        console.log("edit card", card)
+    };
+
+
+    const handleOkEdit = () => {
+        // if (menuToEdit) {
+        //     dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: menuToEdit }));
+        //     setIsModalEditOpen(false);
+        //     setMenuToEdit(null);
+        //     message.success("succesfully edited menu");
+        // }
+        if (menuToEdit) {
+            dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: menuToEdit }));
+            setIsModalEditOpen(false);
+            // setMenuToEdit({  // Mengosongkan kembali menuToEdit setelah proses edit selesai
+            //     id: null,
+            //     name: "",
+            //     description: "",
+            //     imageUrl: "",
+            //     price: "",
+            //     stock: ""
+            // });
+            setMenuToEdit(null);
+            message.success("successfully edited menu");
+            console.log("data setelah succes", menuToEdit)
+        }
+    }
+
+
+
+    const handleCancelEdit = () => {
+        setIsModalEditOpen(false);
+    };
+
+    // Add to Cart
     const addToCartHandler = (idResto, namaResto, id, name, price) => {
+        console.log("add to cart id resto", idResto)
+        console.log("id menu", id)
         if (isCustEmpty === true) {
             dispatch(cartActions.toggleDrawer(false));
             dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
@@ -28,6 +112,7 @@ const RestoMenuPage = () => {
         }
     };
 
+    // Add New Menu
     const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
     const showAddMenu = () => {
         setIsAddMenuOpen(true);
@@ -37,8 +122,8 @@ const RestoMenuPage = () => {
         name: "",
         description: "",
         imageUrl: "",
-        price: "",
-        stock: ""
+        price: 0,
+        stock: 0
     })
 
     const onChange = (event) => {
@@ -50,7 +135,7 @@ const RestoMenuPage = () => {
 
     const handleAddMenu = (values) => {
         dispatch(menuActions.addMenu({
-            idResto: id, 
+            idResto: id,
             // menu: { ...menuData }
             menu: values
 
@@ -60,21 +145,36 @@ const RestoMenuPage = () => {
         console.log(values)
     };
 
+    // const showModalDelete = (idResto, idMenu) => {
+    //     console.log("id resto", idResto)
+    //     console.log("id menu", idMenu)
+    //     setIsModalDeleteOpen(true);
+    // };
+
+    // const handleOkeDelete = (idResto, idMenu) => {
+    //     console.log("id resto", idResto)
+    //     console.log("id menu", idMenu)
+    //     dispatch(menuActions.deleteMenu({ idResto, idMenu }))
+    //     // dispatch(menuActions.deleteMenu({ idResto: resto.id, idMenu: id }));
+    //     setIsModalDeleteOpen(false);
+    // };
+
     return (
         <>
-            <div className='flex justify-between'>
-                <Typography.Title level={3}>{resto?.title}</Typography.Title>
-                <div className='flex gap-2'>
-                    <ButtonBasic title={"Edit Menu"} color={"secondary"} textColor={"primary"} />
-                    <ButtonBasic title={"Add Menu"} color={"secondary"} textColor={"primary"} onClick={showAddMenu} />
+            <div className='flex justify-between items-start'>
+                <div className='flex items-start gap-5'>
+                    <Link to={ROUTES.PORTAL_RESTO}>
+                        <ArrowLeftOutlined className='h-[35px]' />
+                    </Link>
+                    <Typography.Title level={3}>{resto?.title}</Typography.Title>
                 </div>
+                <ButtonBasic title={"Add Menu"} color={"secondary"} textColor={"primary"} onClick={showAddMenu} />
             </div>
             <div>
-                {restoMenu && (
+                {resto && (
                     <div>
-                        <Typography.Title level={3}>Menu Resto</Typography.Title>
                         <div className='flex flex-wrap gap-2'>
-                            {restoMenu.menus.map(card => (
+                            {resto.menus.map(card => (
                                 <CardMenu
                                     key={card.id}
                                     name={card.name}
@@ -83,50 +183,146 @@ const RestoMenuPage = () => {
                                     id={card.id}
                                     price={card.price}
                                     stock={card.stock}
-                                    onClick={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
+                                    idResto={resto.id}
+                                    addCart={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
+                                    deleteMenu={showDeleteConfirm}
+                                    editMenu={showModalEdit}
                                 />
                             ))}
                         </div>
                     </div>
                 )}
             </div>
-            <Modal title="Add Menu Resto" open={isAddMenuOpen} okType='danger' onCancel={() => setIsAddMenuOpen(false)}>
+
+            {/* Modal Add Menu */}
+            <Modal title="Add Menu Resto"
+                open={isAddMenuOpen}
+                okType='danger'
+                onCancel={() => setIsAddMenuOpen(false)}
+                footer={false}
+            >
                 <Form className='m-2 mt-5'
                     name="basic"
                     onFinish={handleAddMenu}
                     autoComplete="off"
                     layout='vertical'
+                    requiredMark={false}
                 >
                     <Form.Item
                         label="Name"
                         name="name"
+                        rules={[
+                            { required: true, message: 'Name is required!' },
+                            { min: 3, message: 'Name must be at least 3 characters!' }
+                        ]}
                     >
-                        <Input onChange={onChange} value={menuData.name} required />
+                        <Input onChange={onChange} value={menuData.name} />
                     </Form.Item>
                     <Form.Item
                         label="Description"
                         name="description"
+                        rules={[
+                            { required: true, message: 'Description is required!' },
+                            { min: 3, message: 'Description must be at least 3 characters!' }
+                        ]}
                     >
-                        <Input onChange={onChange} value={menuData.description} required />
+                        <Input onChange={onChange} value={menuData.description} />
                     </Form.Item>
                     <Form.Item
-                        label="Image"
+                        label="Image URL"
                         name="imageUrl"
+                        rules={[
+                            { required: true, message: 'Image URL is required!' },
+                            { type: 'url', message: 'Please enter a valid image URL' }
+                        ]}
                     >
-                        <Input onChange={onChange} value={menuData.imageUrl} required />
+                        <Input onChange={onChange} value={menuData.imageUrl} />
                         {/* <UploadCustom /> */}
                     </Form.Item>
                     <Form.Item
                         label="Price"
                         name="price"
+                        rules={[
+                            { required: true, message: 'Price is required!' },
+                        ]}
                     >
-                        <Input onChange={onChange} value={menuData.price} required type='number' />
+                        <Input onChange={onChange} value={menuData.price} type='number' />
+                    </Form.Item>
+                    <Form.Item
+                        label="Stock"
+                        name="stock"
+                        rules={[
+                            { required: true, message: 'Stock is required!' },
+                        ]}
+                    >
+                        <Input onChange={onChange} value={menuData.stock} type='number' />
+                    </Form.Item>
+                    <Form.Item
+                        wrapperCol={{ span: 20, offset: 19 }}
+                    >
+                        <Button type="primary" htmlType="submit" className='bg-primary'>
+                            Add Menu
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            {/* Modal Delete Menu */}
+            <Modal
+                title="Delete Menu"
+                open={isModalDeleteOpen}
+                onOk={handleOkDelete}
+                onCancel={handleCancelDelete}
+                okType='danger'
+            >
+                <p>Are you sure you want to delete this menu?</p>
+            </Modal>
+
+            {/* Modal Edit Menu */}
+            <Modal
+                title="Edit Menu"
+                open={isModalEditOpen}
+                // onOk={handleOkEdit}
+                onCancel={handleCancelEdit}
+                okType='danger'
+                footer={false}
+            >
+                {/* <Form className='m-2 mt-5'
+                    name="basic"
+                    onFinish={handleOkEdit}
+                    autoComplete="off"
+                    layout='vertical'
+                    initialValues={menuToEdit}
+                >
+                    <Form.Item
+                        label="Name"
+                        name="name"
+                    >
+                        <Input onChange={onChangeEdit} value={menuToEdit.name} placeholder='Enter menu name' required />
+                    </Form.Item>
+                    <Form.Item
+                        label="Description"
+                        name="description"
+                    >
+                        <Input onChange={onChangeEdit} value={menuToEdit.description} placeholder='Enter menu description' required />
+                    </Form.Item>
+                    <Form.Item
+                        label="Image"
+                        name="imageUrl"
+                    >
+                        <Input onChange={onChangeEdit} value={menuToEdit.imageUrl} placeholder='Enter menu image URL' required />
+                    </Form.Item>
+                    <Form.Item
+                        label="Price"
+                        name="price"
+                    >
+                        <Input onChange={onChangeEdit} value={menuToEdit.price} placeholder='Enter menu price' required type='number' />
                     </Form.Item>
                     <Form.Item
                         label="Stock"
                         name="stock"
                     >
-                        <Input onChange={onChange} value={menuData.stock} required type='number' />
+                        <Input onChange={onChangeEdit} value={menuToEdit.stock} placeholder='Enter menu stock' required type='number' />
                     </Form.Item>
                     <Form.Item
                         wrapperCol={{
@@ -135,11 +331,79 @@ const RestoMenuPage = () => {
                         }}
                     >
                         <Button type="primary" htmlType="submit" className='bg-primary'>
-                            Add Menu
+                            Update Menu
+                        </Button>
+                    </Form.Item>
+                </Form> */}
+                <Form
+                    className='m-2 mt-5'
+                    name="basic"
+                    onFinish={handleOkEdit}
+                    autoComplete="off"
+                    layout='vertical'
+                    form={form}
+                    initialValues={menuToEdit} // Mengatur nilai awal form dengan menuToEdit
+                    requiredMark={false}
+                >
+                    <Form.Item
+                        label="Name"
+                        name="name"
+                        rules={[
+                            { required: true, message: 'Please input the name of the menu!' },
+                            { min: 3, message: 'Name must be at least 3 characters!' }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Description"
+                        name="description"
+                        rules={[
+                            { required: true, message: 'Please input the description of the menu!' },
+                            { min: 3, message: 'Description must be at least 3 characters!' }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Image"
+                        name="imageUrl"
+                        rules={[
+                            { required: true, message: 'Please input the image URL of the menu!' },
+                            { type: 'url', message: 'Please input a valid image URL!' }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Price"
+                        name="price"
+                        rules={[
+                            { required: true, message: 'Please input the price of the menu!' }
+                        ]}
+                    >
+                        <Input type='number' />
+                    </Form.Item>
+                    <Form.Item
+                        label="Stock"
+                        name="stock"
+                        rules={[
+                            { required: true, message: 'Please input the stock of the menu!' }
+                        ]}
+                    >
+                        <Input type='number' />
+                    </Form.Item>
+                    <Form.Item
+                        wrapperCol={{ span: 20, offset: 18 }}
+                    >
+                        <Button type="primary" htmlType="submit" className='bg-primary'>
+                            Update Menu
                         </Button>
                     </Form.Item>
                 </Form>
             </Modal>
+
+
         </>
     );
 };
