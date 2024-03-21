@@ -18,7 +18,7 @@ import menu from '../redux/menu';
 
 const DashboardPage = () => {
   const purchaseHistory = useSelector(state => state.cart.purchaseHistory);
-  const restos = useSelector((state) =>state.menu.resto)
+  const restos = useSelector((state) => state.menu.resto)
   const totalRevenue = purchaseHistory.reduce((total, purchase) => total + purchase.total, 0);
   const totalCustomers = purchaseHistory.length;
   const totalResto = restos.length;
@@ -112,7 +112,7 @@ const DashboardPage = () => {
         borderWidth: 1,
       },
     ],
-   };
+  };
 
   //QUANTITY CHART
   //quantity every resto
@@ -163,12 +163,12 @@ const DashboardPage = () => {
     <div className='grid grid-flow-row gap-2'>
       <Typography.Title level={3}>Dashboard</Typography.Title>
       {/* <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'> */}
-        <div className='grid grid-cols-4 gap-2'>
-          <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
-          <CardDashboard title={"Total Restaurants"} value={totalResto} icon={<RestOutlined />}/>
-          <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
-          <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
-        </div>
+      <div className='grid grid-cols-4 gap-2'>
+        <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
+        <CardDashboard title={"Total Restaurants"} value={totalResto} icon={<RestOutlined />} />
+        <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
+        <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
+      </div>
 
       {/* </div> */}
       <div className='space-y-5'>
@@ -179,8 +179,9 @@ const DashboardPage = () => {
               <BarChartOutlined />
               <h3 className='text-sm'>Restaurant Revenue</h3>
             </div>
-            <div className='p-5 flex items-center justify-center'>
-              <BarChart data={barChartData} />            </div>
+            <div className='p-5 h-full flex items-center justify-center'>
+              <BarChart data={barChartData} />            
+            </div>
           </div>
 
           {/* pie chart card */}
