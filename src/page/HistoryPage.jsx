@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { formatRupiah } from '../util/format';
 import { ShoppingOutlined } from '@ant-design/icons';
 import ButtonBasic from '../component/ButtonBasic';
+import moment from 'moment';
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -44,16 +45,19 @@ const HistoryPage = () => {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      sorter: (a, b) => moment(a.date, 'DD/MM/YYYY').unix() - moment(b.date, 'DD/MM/YYYY').unix()
     },
     {
       title: 'Customer',
       dataIndex: 'customer',
       key: 'customer',
+      sorter: (a, b) => a.customer.length - b.customer.length
     },
     {
       title: 'Table',
       dataIndex: 'meja',
       key: 'meja',
+      sorter: (a, b) => a.meja - b.meja,
     },
     {
       title: 'Restaurants',
@@ -74,6 +78,7 @@ const HistoryPage = () => {
       render: (text, record) => (
         <span>{formatRupiah(record.total)}</span>
       ),
+      sorter: (a, b) => a.total - b.total
     },
     {
       title: 'Action',
@@ -85,6 +90,10 @@ const HistoryPage = () => {
       ),
     },
   ];
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+  };
 
   const handleDetail = (record) => {
     setDetail(record);
@@ -125,6 +134,7 @@ const HistoryPage = () => {
               ),
             },
           }}
+          onChange={onChange}
         />
       </div>
       <Modal
@@ -133,6 +143,7 @@ const HistoryPage = () => {
         onCancel={() => setDetailVisible(false)}
         okType='danger'
         onOk={() => setDetailVisible(false)}
+        footer={false}
       >
         {detail && (
           <div>
