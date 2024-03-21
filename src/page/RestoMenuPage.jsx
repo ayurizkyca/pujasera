@@ -7,6 +7,7 @@ import { cartActions } from '../redux/cart.js'
 import ButtonBasic from '../component/ButtonBasic.jsx'
 import UploadCustom from '../component/UploadCustom.jsx'
 import { menuActions } from '../redux/menu.js'
+import { v4 as uuidv4 } from 'uuid';
 import {
     ArrowLeftOutlined,
 } from '@ant-design/icons';
@@ -44,41 +45,6 @@ const RestoMenuPage = () => {
         setIsModalDeleteOpen(false);
     };
 
-    // const onChangeEdit = (e) => {
-    //     setMenuToEdit({
-    //         ...menuToEdit,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
-
-    // const showModalEdit = (card) => {
-    //     setIsModalEditOpen(true);
-    //     // setMenuToEdit(card)
-    //     setMenuToEdit({ ...card });
-    //     console.log("edit card show modal", card)
-    // };
-
-
-    // const handleOkEdit = () => {
-    //     if (values) {
-    //         dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: values }));
-    //         setIsModalEditOpen(false);
-    //         setMenuToEdit(null);
-    //         message.success("successfully edited menu");
-    //         console.log("data setelah succes", menuToEdit)
-    //     }
-    // }
-
-    // const handleCancelEdit = () => {
-    //     setIsModalEditOpen(false);
-    //     setMenuToEdit(null);
-    //     console.log("data setelah cancel", menuToEdit)
-    // };
-
-    // useEffect(() => {
-    //     console.log("nilai menuToEdit telah berubah", menuToEdit);
-    // }, [menuToEdit]);
-
     // Edit Menu
     const showModalEdit = (card) => {
         setMenuToEdit(card);
@@ -90,12 +56,12 @@ const RestoMenuPage = () => {
             stock: card.stock
         });
         setIsModalEditOpen(true);
-        console.log("name show", card.name)
+        console.log("id show", card.id)
     };
 
-    const handleOkEdit = () => {
-        form.submit();
-    };
+    // const handleOkEdit = () => {
+    //     form.submit();
+    // };
 
     const handleCancelEdit = () => {
         setIsModalEditOpen(false);
@@ -105,10 +71,24 @@ const RestoMenuPage = () => {
     };
 
     const onFinishEdit = (values) => {
-        dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: values }));
+        const idMenu = uuidv4();
+        dispatch(menuActions.editMenu({ 
+            idResto: id, 
+            idMenu: menuToEdit.id, 
+            // idMenu: idMenu, 
+            menu: {
+                id: idMenu,
+                name: values.name,
+                description: values.description,
+                imageUrl: values.imageUrl,
+                price: values.price,
+                stock: values.stock
+            } 
+        }));
         setIsModalEditOpen(false);
         setMenuToEdit(null);
         message.success("successfully edited menu");
+        console.log("id on finish", idMenu)
     };
 
     useEffect(() => {
@@ -135,6 +115,7 @@ const RestoMenuPage = () => {
     };
 
     const [menuData, setMenuData] = useState({
+        id : "",
         name: "",
         description: "",
         imageUrl: "",
@@ -150,15 +131,25 @@ const RestoMenuPage = () => {
     };
 
     const handleAddMenu = (values) => {
+        const idMenu = uuidv4(); // Generate a UUID for idMenu
         dispatch(menuActions.addMenu({
             idResto: id,
+            idMenu : idMenu,
             // menu: { ...menuData }
-            menu: values
+            menu: {
+                id: idMenu,
+                name: values.name,
+                description: values.description,
+                imageUrl: values.imageUrl,
+                price: values.price,
+                stock: values.stock
+            }
 
         }));
         message.success("successfully added menu");
         setIsAddMenuOpen(false);
         console.log(values)
+        console.log("ini id gernerated by uuid", idMenu )
     };
 
     return (
