@@ -119,6 +119,9 @@ export default function Navbar() {
                         <Form.Item
                             label="Customer"
                             name="customer"
+                            rules={[
+                                { min: 3, message: 'Customer name must be at least 3 characters!' }
+                            ]}
                         >
                             <Input onChange={onChange} value={customerData.customer} required />
                         </Form.Item>
