@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CardMenu from '../component/CardMenu.jsx'
 import { Link, useParams } from 'react-router-dom'
 import { Typography, Modal, Form, Input, message, Button } from 'antd'
@@ -44,60 +44,76 @@ const RestoMenuPage = () => {
         setIsModalDeleteOpen(false);
     };
 
+    // const onChangeEdit = (e) => {
+    //     setMenuToEdit({
+    //         ...menuToEdit,
+    //         [e.target.name]: e.target.value
+    //     })
+    // }
+
+    // const showModalEdit = (card) => {
+    //     setIsModalEditOpen(true);
+    //     // setMenuToEdit(card)
+    //     setMenuToEdit({ ...card });
+    //     console.log("edit card show modal", card)
+    // };
+
+
+    // const handleOkEdit = () => {
+    //     if (values) {
+    //         dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: values }));
+    //         setIsModalEditOpen(false);
+    //         setMenuToEdit(null);
+    //         message.success("successfully edited menu");
+    //         console.log("data setelah succes", menuToEdit)
+    //     }
+    // }
+
+    // const handleCancelEdit = () => {
+    //     setIsModalEditOpen(false);
+    //     setMenuToEdit(null);
+    //     console.log("data setelah cancel", menuToEdit)
+    // };
+
+    // useEffect(() => {
+    //     console.log("nilai menuToEdit telah berubah", menuToEdit);
+    // }, [menuToEdit]);
+
     // Edit Menu
-    // const [menuToEdit, setMenuToEdit] = useState({
-    //     id: null,
-    //     name: "",
-    //     description: "",
-    //     imageUrl: "",
-    //     price: "",
-    //     stock: ""
-    // })
-
-    const onChangeEdit = (e) => {
-        setMenuToEdit({
-            ...menuToEdit,
-            [e.target.name]: e.target.value
-        })
-    }
-
     const showModalEdit = (card) => {
+        setMenuToEdit(card);
+        form.setFieldsValue({
+            name: card.name,
+            description: card.description,
+            imageUrl: card.imageUrl,
+            price: card.price,
+            stock: card.stock
+        });
         setIsModalEditOpen(true);
-        // setMenuToEdit(card)
-        setMenuToEdit({ ...card });
-        console.log("edit card", card)
+        console.log("name show", card.name)
     };
 
-
     const handleOkEdit = () => {
-        // if (menuToEdit) {
-        //     dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: menuToEdit }));
-        //     setIsModalEditOpen(false);
-        //     setMenuToEdit(null);
-        //     message.success("succesfully edited menu");
-        // }
-        if (menuToEdit) {
-            dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: menuToEdit }));
-            setIsModalEditOpen(false);
-            // setMenuToEdit({  // Mengosongkan kembali menuToEdit setelah proses edit selesai
-            //     id: null,
-            //     name: "",
-            //     description: "",
-            //     imageUrl: "",
-            //     price: "",
-            //     stock: ""
-            // });
-            setMenuToEdit(null);
-            message.success("successfully edited menu");
-            console.log("data setelah succes", menuToEdit)
-        }
-    }
-
-
+        form.submit();
+    };
 
     const handleCancelEdit = () => {
         setIsModalEditOpen(false);
+        setMenuToEdit(null);
+        form.resetFields();
+        console.log ("ini adalah close tapi pakai cancel")
     };
+
+    const onFinishEdit = (values) => {
+        dispatch(menuActions.editMenu({ idResto: id, idMenu: menuToEdit.id, menu: values }));
+        setIsModalEditOpen(false);
+        setMenuToEdit(null);
+        message.success("successfully edited menu");
+    };
+
+    useEffect(() => {
+        console.log("nilai menuToEdit telah berubah", menuToEdit);
+    }, [menuToEdit]);
 
     // Add to Cart
     const addToCartHandler = (idResto, namaResto, id, name, price) => {
@@ -144,20 +160,6 @@ const RestoMenuPage = () => {
         setIsAddMenuOpen(false);
         console.log(values)
     };
-
-    // const showModalDelete = (idResto, idMenu) => {
-    //     console.log("id resto", idResto)
-    //     console.log("id menu", idMenu)
-    //     setIsModalDeleteOpen(true);
-    // };
-
-    // const handleOkeDelete = (idResto, idMenu) => {
-    //     console.log("id resto", idResto)
-    //     console.log("id menu", idMenu)
-    //     dispatch(menuActions.deleteMenu({ idResto, idMenu }))
-    //     // dispatch(menuActions.deleteMenu({ idResto: resto.id, idMenu: id }));
-    //     setIsModalDeleteOpen(false);
-    // };
 
     return (
         <>
@@ -287,62 +289,14 @@ const RestoMenuPage = () => {
                 okType='danger'
                 footer={false}
             >
-                {/* <Form className='m-2 mt-5'
-                    name="basic"
-                    onFinish={handleOkEdit}
-                    autoComplete="off"
-                    layout='vertical'
-                    initialValues={menuToEdit}
-                >
-                    <Form.Item
-                        label="Name"
-                        name="name"
-                    >
-                        <Input onChange={onChangeEdit} value={menuToEdit.name} placeholder='Enter menu name' required />
-                    </Form.Item>
-                    <Form.Item
-                        label="Description"
-                        name="description"
-                    >
-                        <Input onChange={onChangeEdit} value={menuToEdit.description} placeholder='Enter menu description' required />
-                    </Form.Item>
-                    <Form.Item
-                        label="Image"
-                        name="imageUrl"
-                    >
-                        <Input onChange={onChangeEdit} value={menuToEdit.imageUrl} placeholder='Enter menu image URL' required />
-                    </Form.Item>
-                    <Form.Item
-                        label="Price"
-                        name="price"
-                    >
-                        <Input onChange={onChangeEdit} value={menuToEdit.price} placeholder='Enter menu price' required type='number' />
-                    </Form.Item>
-                    <Form.Item
-                        label="Stock"
-                        name="stock"
-                    >
-                        <Input onChange={onChangeEdit} value={menuToEdit.stock} placeholder='Enter menu stock' required type='number' />
-                    </Form.Item>
-                    <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
-                    >
-                        <Button type="primary" htmlType="submit" className='bg-primary'>
-                            Update Menu
-                        </Button>
-                    </Form.Item>
-                </Form> */}
                 <Form
                     className='m-2 mt-5'
                     name="basic"
-                    onFinish={handleOkEdit}
+                    onFinish={onFinishEdit}
                     autoComplete="off"
                     layout='vertical'
                     form={form}
-                    initialValues={menuToEdit} // Mengatur nilai awal form dengan menuToEdit
+                    // initialValues={menuToEdit}
                     requiredMark={false}
                 >
                     <Form.Item
@@ -353,7 +307,7 @@ const RestoMenuPage = () => {
                             { min: 3, message: 'Name must be at least 3 characters!' }
                         ]}
                     >
-                        <Input />
+                        <Input  />
                     </Form.Item>
                     <Form.Item
                         label="Description"
@@ -363,7 +317,7 @@ const RestoMenuPage = () => {
                             { min: 3, message: 'Description must be at least 3 characters!' }
                         ]}
                     >
-                        <Input />
+                        <Input  />
                     </Form.Item>
                     <Form.Item
                         label="Image"
@@ -373,7 +327,7 @@ const RestoMenuPage = () => {
                             { type: 'url', message: 'Please input a valid image URL!' }
                         ]}
                     >
-                        <Input />
+                        <Input  />
                     </Form.Item>
                     <Form.Item
                         label="Price"
@@ -382,7 +336,7 @@ const RestoMenuPage = () => {
                             { required: true, message: 'Please input the price of the menu!' }
                         ]}
                     >
-                        <Input type='number' />
+                        <Input type='number'  />
                     </Form.Item>
                     <Form.Item
                         label="Stock"
@@ -391,7 +345,7 @@ const RestoMenuPage = () => {
                             { required: true, message: 'Please input the stock of the menu!' }
                         ]}
                     >
-                        <Input type='number' />
+                        <Input type='number'  />
                     </Form.Item>
                     <Form.Item
                         wrapperCol={{ span: 20, offset: 18 }}
@@ -402,11 +356,8 @@ const RestoMenuPage = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-
-
         </>
     );
 };
-
 
 export default RestoMenuPage
