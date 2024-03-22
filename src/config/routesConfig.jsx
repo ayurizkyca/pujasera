@@ -25,7 +25,6 @@ const RoutesConfig = () => {
                     <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
                     <Route path={ROUTES.REPORT} element={<ReportPage />} />
                     <Route path={ROUTES.DETAIL_RESTO + '/:id'} element={<RestoMenuPage />} />
-                    {/* <Route path={`${ROUTES.DETAIL_RESTO}/:id`} element={<RestoMenuPage/>} /> */}
                 </Route>
                 <Route path='*' element={<NotFoundPage />} />
                 <Route path={ROUTES.CART} element={<PrivateRoute><CartPage /></PrivateRoute>} />
