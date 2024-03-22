@@ -13,6 +13,7 @@ import { cartActions } from '../redux/cart'
 import { useNavigate, Link } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
 import { COLORS } from '../constant/propertiesConstant'
+import { menuActions } from '../redux/menu'
 
 
 export default function Navbar() {
@@ -21,19 +22,23 @@ export default function Navbar() {
     const navigate = useNavigate();
     const customerExist = useSelector((state) => state.cart.customer);
     const tableExist = useSelector((state) => state.cart.meja);
+    const menuPending = useSelector((state) => state.cart.pendingAddToCart)
 
     //modal delete Customer
-    const [modalDeleteOpen, setModalDeletOpen] = useState(false);
+    const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const showModalDelete = () => {
-        setModalDeletOpen(true);
+        setModalDeleteOpen(true);
     };
     const handleCancelDelete = () => {
-        setModalDeletOpen(false);
+        setModalDeleteOpen(false);
     };
     const handleDeleteCust = () => {
         dispatch(cartActions.deleteCustomer());
         message.success("Customer Deleted");
-        setModalDeletOpen(false);
+        setModalDeleteOpen(false);
+        setTimeout(() => {
+            dispatch(cartActions.toggleDrawer(false));
+        }, 800)
     }
 
     //modal logout
@@ -66,14 +71,28 @@ export default function Navbar() {
         setTimeout(() => {
             message.success("You get the table, now choose your meal");
         })
+        const { idResto, idMenu, stock } = menuPending;
+        if (stock > 0) {
+            dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
+        }
+        console.log("ini adalah data menu on pending");
+        console.log("id resto", idResto)
+        console.log("id menu", idMenu)
+        console.log("stock", stock)
+        dispatch(menuActions.updateStock(idResto, idMenu, stock - 1));
+        console.log("stok setelah berubah", stock)
         dispatch(cartActions.toggleDrawer(true));
     };
+
+
     const onChange = (event) => {
         setCustomerData({
             ...customerData,
             [event.target.name]: event.target.value,
         });
     };
+
+
 
     const showCart = () => {
         navigate(ROUTES.CART);
@@ -155,11 +174,33 @@ export default function Navbar() {
                 )}
 
             </Drawer>
-            <Modal title="Logout" open={isModalOpen} onOk={logoutClick} onCancel={handleCancel} okType='danger'>
+            <Modal
+                title="Logout"
+                open={isModalOpen}
+                onOk={logoutClick}
+                onCancel={handleCancel}
+                okType='danger'
+                footer={false}
+            >
                 <p>Are you sure want to exit?</p>
+                <div className='flex gap-1 justify-end'>
+                    <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancel} />
+                    <ButtonBasic title={"Yes"} onClick={logoutClick} textColor={"white"} color={"primary"} fontWeight={"semibold"} />
+                </div>
             </Modal>
-            <Modal title="Delete Customer" open={modalDeleteOpen} onOk={handleDeleteCust} onCancel={handleCancelDelete} okType='danger'>
+            <Modal
+                title="Delete Customer"
+                open={modalDeleteOpen}
+                onOk={handleDeleteCust}
+                onCancel={handleCancelDelete}
+                okType='danger'
+                footer={false}
+            >
                 <p>Are you sure to delete customer?<br /> It will be delete your shopping cart list</p>
+                <div className='flex gap-1 justify-end'>
+                    <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancelDelete} />
+                    <ButtonBasic title={"Yes"} onClick={handleDeleteCust} textColor={"white"} color={"primary"} fontWeight={"semibold"} />
+                </div>
             </Modal>
         </>
 
