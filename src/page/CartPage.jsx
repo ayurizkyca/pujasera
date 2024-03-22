@@ -65,12 +65,23 @@ const CartPage = () => {
                     <h3 className='font-bold text-2xl text-primary'> {formatRupiah(total)}</h3>
                 </div>
                 <div className='flex gap-2'>
-                    <ButtonBasic color={"secondary"} title={"Cancel"} onClick={handleToPortal} textColor={"primary"}/>
+                    <ButtonBasic color={"secondary"} title={"Cancel"} onClick={handleToPortal} textColor={"primary"} />
                     <ButtonBasic color={"primary"} title={"Checkout"} onClick={showModal} textColor={"white"} />
                 </div>
             </div>
-            <Modal title="Checkout" open={isModalOpen} onOk={handleCheckout} onCancel={handleCancel} okType='danger'>
-                <p>Please ensure your order is correct. Proceed to checkout now?</p>
+            <Modal
+                title="Checkout"
+                open={isModalOpen}
+                onOk={handleCheckout}
+                onCancel={handleCancel}
+                okType='danger'
+                footer={false}
+            >
+                <p className='pb-2'>Please ensure your order is correct. Proceed to checkout now?</p>
+                <div className='flex justify-end gap-1'>
+                    <ButtonBasic color={"secondary"} title={"Cancel"} onClick={handleCancel} textColor={"primary"} />
+                    <ButtonBasic color={"primary"} title={"Yes"} onClick={handleCheckout} textColor={"white"} />
+                </div>
             </Modal>
         </div>
     );
