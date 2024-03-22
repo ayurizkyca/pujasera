@@ -49,14 +49,14 @@ const Auth = () => {
             layout='vertical'
         >
             <Form.Item
-                label="Username"
+                label={<span className='text-primary text-[16px] font-bold'>Username</span>}
                 name="username"
             >
                 <Input onChange={(event) => onChange(event)} value={state.username} required/>
             </Form.Item>
 
             <Form.Item
-                label="Password"
+                label={<span className='text-primary text-[16px] font-bold'>Password</span>}
                 name="password"
             >
                 <Input.Password onChange={onChange} value={state.password} required/>
@@ -64,7 +64,7 @@ const Auth = () => {
 
 
             <Form.Item>
-                <Button className='bg-primary w-full' type="primary" htmlType="submit">
+                <Button className='bg-primary w-full font-bold' type="primary" htmlType="submit">
                     Login
                 </Button>
             </Form.Item>
