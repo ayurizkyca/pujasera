@@ -13,6 +13,9 @@ import { formatRupiah } from '../util/format';
 import { ShoppingOutlined } from '@ant-design/icons';
 import ButtonBasic from '../component/ButtonBasic';
 import moment from 'moment';
+// import dayjs from 'dayjs';
+// import customParseFormat from 'dayjs/plugin/customParseFormat';
+// import type { DatePickerProps } from 'antd';
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -24,40 +27,72 @@ const HistoryPage = () => {
   const [searchText, setSearchText] = useState('');
   const [dateRange, setDateRange] = useState([]);
 
-  const handleDateChange = (dates) => {
-    setDateRange(dates);
+  // const handleDateChange = (dates) => {
+  //   setDateRange(dates);
+  // };
+  const disableFutureDates = (currentDate) => {
+    return currentDate && currentDate > moment().endOf("day");
   };
 
-  const purchaseDataFiltered = purchaseHistory.filter(item => {
-    if (dateRange.length === 0) return true;
-    const itemDate = new Date(item.date);
-    return itemDate >= dateRange[0] && itemDate <= dateRange[1];
-  });
+   const onChangeDatePicker = (dates, dateStrings) => {
+    if (!dates || dates.length === 0) {
+      setDateRange([]);
+    } else {
+      setDateRange(dateStrings);
+    }
+  }
 
-  const purchaseDataSorted = [...purchaseDataFiltered].reverse().filter(item =>
-    Object.keys(item).some(key =>
-      item[key].toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+
+
+  const filteredData = [...purchaseHistory].reverse().filter(item => {
+    const searchTextMatch = searchText
+    ? Object.values(item).some(value => 
+        typeof value === 'string' && 
+        value.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : true;
+
+  const dateRangeMatch = dateRange.length === 0
+    ? true
+    : moment(item.date, 'DD/MM/YYYY').isSameOrAfter(dateRange[0], 'day') &&
+      moment(item.date, 'DD/MM/YYYY').isSameOrBefore(dateRange[1], 'day');
+
+  return searchTextMatch && dateRangeMatch;
+  })
+
+  // const purchaseDataFiltered = purchaseHistory.filter(item => {
+  //   if (dateRange.length === 0) return true;
+  //   const itemDate = new Date(item.date);
+  //   return itemDate >= dateRange[0] && itemDate <= dateRange[1];
+  // });
+
+  // const purchaseDataSorted = [...purchaseDataFiltered].reverse().filter(item =>
+  //   Object.keys(item).some(key =>
+  //     item[key].toString().toLowerCase().includes(searchText.toLowerCase())
+  //   )
+  // );
 
   const columns = [
     {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
-      sorter: (a, b) => moment(a.date, 'DD/MM/YYYY').unix() - moment(b.date, 'DD/MM/YYYY').unix()
+      // sorter: (a, b) => moment(a.date, 'DD/MM/YYYY').unix() - moment(b.date, 'DD/MM/YYYY').unix()
+      // sorter: (a, b) => a.date.localeCompare(b.date),
+      // sortOrder: sortOrder['date'],
+      // sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Customer',
       dataIndex: 'customer',
       key: 'customer',
-      sorter: (a, b) => a.customer.length - b.customer.length
+      // sorter: (a, b) => a.customer.length - b.customer.length
     },
     {
       title: 'Table',
       dataIndex: 'meja',
       key: 'meja',
-      sorter: (a, b) => a.meja - b.meja,
+      // sorter: (a, b) => a.meja - b.meja,
     },
     {
       title: 'Restaurants',
@@ -78,7 +113,7 @@ const HistoryPage = () => {
       render: (text, record) => (
         <span>{formatRupiah(record.total)}</span>
       ),
-      sorter: (a, b) => a.total - b.total
+      // sorter: (a, b) => a.total > b.total,
     },
     {
       title: 'Action',
@@ -103,6 +138,8 @@ const HistoryPage = () => {
     backgroundColor: '#c2161e',
     color: 'white',
   };
+  const dateFormat = 'DD/MM/YYYY';
+
 
   return (
     <div>
@@ -111,20 +148,26 @@ const HistoryPage = () => {
         <div className='flex gap-2'>
           <div className="search-container">
             <Search
-              placeholder="Search"
+              placeholder="Customer or Table"
+              // enterButton
               value={searchText}
               onChange={e => setSearchText(e.target.value)}
             />
           </div>
-          <Space direction="vertical" size={12}>
-            <RangePicker onChange={handleDateChange} />
-          </Space>
+          {/* <Space direction="vertical" size={12}>
+            <RangePicker 
+            onChange={dates => setDateRange(dates)}
+            // onChange={handleDateChange} 
+            format="DD/MM/YYYY"
+            disabledDate={disableFutureDates}
+            />
+          </Space> */}
         </div>
       </div>
       <div className='overflow-auto'>
         <Table
           columns={columns}
-          dataSource={purchaseDataSorted}
+          dataSource={filteredData}
           components={{
             header: {
               cell: (props) => (
@@ -134,7 +177,7 @@ const HistoryPage = () => {
               ),
             },
           }}
-          onChange={onChange}
+          // onChange={onChange}
         />
       </div>
       <Modal
