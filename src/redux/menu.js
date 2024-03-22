@@ -17,35 +17,34 @@ const menuSlice = createSlice({
             }
         },
         deleteMenu(state, action) {
-            console.log("masuk actions")
             const { idResto, idMenu } = action.payload;
-            console.log("inisialisasi payload")
             const restoIndex = state.resto.findIndex(resto => resto.id === idResto);
-            console.log("inisialisasi index resto", restoIndex)
             if (restoIndex !== -1) {
-                console.log("masuk if")
                 const menuIndex = state.resto[restoIndex].menus.findIndex(menu => menu.id === idMenu);
-                console.log("cari menu index", menuIndex)
                 if (menuIndex !== -1) {
-                    console.log("delete menu")
                     state.resto[restoIndex].menus.splice(menuIndex, 1);
                 }
             }
         },
         editMenu(state, action) {
-            console.log("masuk actions")
             const { idResto, idMenu, menu } = action.payload;
-            console.log("initialisasi payload")
-            console.log("id Resto", idResto)
-            console.log("idMenu", idMenu)
-            console.log("isi menu", menu)
             const restoIndex = state.resto.findIndex(resto => resto.id === idResto);
-            console.log("id resto index", restoIndex)
             if (restoIndex !== -1) {
                 const menuIndex = state.resto[restoIndex].menus.findIndex(menu => menu.id === idMenu);
-                console.log("cari  menu index", menuIndex)
                 if (menuIndex !== -1) {
                     state.resto[restoIndex].menus[menuIndex] = menu;
+                }
+            }
+        },
+        updateStock(state, action) {
+            console.log("masuk redux")
+            const { idResto, idMenu, stock } = action.payload;
+            const restoIndex = state.resto.findIndex(resto => resto.id === idResto);
+            console.log("id resto update redux", restoIndex)
+            if (restoIndex !== -1) {
+                const menuIndex = state.resto[restoIndex].menus.findIndex(menu => menu.id === idMenu);
+                if (menuIndex !== -1) {
+                    state.resto[restoIndex].menus[menuIndex].stock = stock;
                 }
             }
         }

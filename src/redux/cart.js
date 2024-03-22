@@ -20,7 +20,7 @@ const cartSlice = createSlice({
             state.meja = action.payload.meja;
             state.isCustEmpty = false;
             if (state.pendingAddToCart) {
-                const { idResto, namaResto, idMenu, namaMenu, harga, qty } = state.pendingAddToCart;
+                const { idResto, namaResto, idMenu, namaMenu, harga, qty, stock } = state.pendingAddToCart;
                 const existingRestoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
                 if (existingRestoIndex !== -1) {
                     const existingResto = state.menuItem[existingRestoIndex];
@@ -28,15 +28,16 @@ const cartSlice = createSlice({
 
                     if (existingMenuIndex !== -1) {
                         existingResto.menu[existingMenuIndex].qty += qty;
+                        existingResto.menu[existingMenuIndex].stock -= qty + 1;
                     } else {
-                        existingResto.menu.push({ idMenu, namaMenu, harga, qty });
+                        existingResto.menu.push({ idMenu, namaMenu, harga, qty, stock: stock - qty });
                     }
                     existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
                 } else {
                     const newResto = {
                         idResto,
                         namaResto,
-                        menu: [{ idMenu, namaMenu, harga, qty }],
+                        menu: [{ idMenu, namaMenu, harga, qty, stock: stock-1 }],
                         subtotal: harga * qty
 
                     };
@@ -71,7 +72,7 @@ const cartSlice = createSlice({
             if (state.isCustEmpty) {
                 state.pendingAddToCart = action.payload;
             } else {
-                const { idResto, namaResto, idMenu, namaMenu, harga, qty } = action.payload;
+                const { idResto, namaResto, idMenu, namaMenu, harga, qty, stock } = action.payload;
                 const existingRestoIndex = state.menuItem.findIndex(item => item.idResto === idResto);
                 if (existingRestoIndex !== -1) {
                     const existingResto = state.menuItem[existingRestoIndex];
@@ -79,8 +80,10 @@ const cartSlice = createSlice({
 
                     if (existingMenuIndex !== -1) {
                         existingResto.menu[existingMenuIndex].qty += qty;
+                        existingResto.menu[existingMenuIndex].stock -= qty;
+                        // existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
                     } else {
-                        existingResto.menu.push({ idMenu, namaMenu, harga, qty });
+                        existingResto.menu.push({ idMenu, namaMenu, harga, qty, stock });
                     }
                     // Hitung ulang subtotal untuk restoran yang berubah
                     existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
@@ -88,7 +91,7 @@ const cartSlice = createSlice({
                     const newResto = {
                         idResto,
                         namaResto,
-                        menu: [{ idMenu, namaMenu, harga, qty }],
+                        menu: [{ idMenu, namaMenu, harga, qty, stock }],
                         subtotal: harga * qty
                     };
                     state.menuItem.push(newResto);
@@ -109,20 +112,22 @@ const cartSlice = createSlice({
                 const menuItem = resto.menu.find(item => item.idMenu === idMenu);
                 if (menuItem) {
                     menuItem.qty += 1;
+                    menuItem.stock -= 1;
                     menuItem.subtotal += menuItem.harga;
                     resto.subtotal += menuItem.harga;
                     state.total += menuItem.harga;
                 }
             }
         },
-
-        decrementQuantity(state, action) {
+        
+       decrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
             if (resto) {
                 const menuItem = resto.menu.find(item => item.idMenu === idMenu);
                 if (menuItem.qty > 0) {
                     menuItem.qty -= 1;
+                    menuItem.stock += 1;
                     menuItem.subtotal -= menuItem.harga;
                     resto.subtotal -= menuItem.harga;
                     state.total -= menuItem.harga;
