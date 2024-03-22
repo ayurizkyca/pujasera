@@ -38,6 +38,7 @@ const RestoMenuPage = () => {
             dispatch(menuActions.deleteMenu({ idResto: id, idMenu: menuToDelete.id }));
             setIsModalDeleteOpen(false);
             setMenuToDelete(null);
+            message.success("Menu Deleted");
         }
     }
 
@@ -96,16 +97,25 @@ const RestoMenuPage = () => {
     }, [menuToEdit]);
 
     // Add to Cart
-    const addToCartHandler = (idResto, namaResto, id, name, price) => {
-        console.log("add to cart id resto", idResto)
-        console.log("id menu", id)
-        if (isCustEmpty === true) {
-            dispatch(cartActions.toggleDrawer(false));
-            dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
-        } else {
-            dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 }));
-            message.success("item added");
+    const addToCartHandler = (idResto, namaResto, id, name, price, stock) => {
+        console.log(" add to chart id resto", idResto)
+        console.log("add to chart id menu", id)
+        console.log("add to chart ini stock", stock)
+        if(stock>0) {
+            if (isCustEmpty === true) {
+                dispatch(cartActions.toggleDrawer(false));
+                dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 , stock}));
+                // dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
+                // message.success("item added");
+            } else {
+                dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1, stock}));
+                dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
+                message.success("item added");
+            }
+        }else{
+            message.error("item out of stock");
         }
+        
     };
 
     // Add New Menu
@@ -148,8 +158,6 @@ const RestoMenuPage = () => {
         }));
         message.success("successfully added menu");
         setIsAddMenuOpen(false);
-        console.log(values)
-        console.log("ini id gernerated by uuid", idMenu )
     };
 
     return (
@@ -177,7 +185,7 @@ const RestoMenuPage = () => {
                                     price={card.price}
                                     stock={card.stock}
                                     idResto={resto.id}
-                                    addCart={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price)}
+                                    addCart={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price, card.stock)}
                                     deleteMenu={showDeleteConfirm}
                                     editMenu={showModalEdit}
                                 />
@@ -256,6 +264,7 @@ const RestoMenuPage = () => {
                         <Button type="primary" htmlType="submit" className='bg-primary'>
                             Add Menu
                         </Button>
+                        {/* <ButtonBasic title={"Add Menu"} htmlType="submit" color={"secondary"} textColor={"primary"}/> */}
                     </Form.Item>
                 </Form>
             </Modal>
@@ -267,15 +276,19 @@ const RestoMenuPage = () => {
                 onOk={handleOkDelete}
                 onCancel={handleCancelDelete}
                 okType='danger'
+                footer={false}
             >
                 <p>Are you sure you want to delete this menu?</p>
+                <div className='flex gap-1 justify-end'>
+                    <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancelDelete} />
+                    <ButtonBasic title={"Yes"} onClick={handleOkDelete} textColor={"white"} color={"primary"} fontWeight={"semibold"} />
+                </div>
             </Modal>
 
             {/* Modal Edit Menu */}
             <Modal
                 title="Edit Menu"
                 open={isModalEditOpen}
-                // onOk={handleOkEdit}
                 onCancel={handleCancelEdit}
                 okType='danger'
                 footer={false}
@@ -287,7 +300,6 @@ const RestoMenuPage = () => {
                     autoComplete="off"
                     layout='vertical'
                     form={form}
-                    // initialValues={menuToEdit}
                     requiredMark={false}
                 >
                     <Form.Item
