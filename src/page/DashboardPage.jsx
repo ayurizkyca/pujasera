@@ -12,6 +12,7 @@ import {
   BarChartOutlined,
   PieChartOutlined,
   RestOutlined,
+  ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { formatRupiah } from '../util/format';
 import menu from '../redux/menu';
@@ -22,7 +23,18 @@ const DashboardPage = () => {
   const totalRevenue = purchaseHistory.reduce((total, purchase) => total + purchase.total, 0);
   const totalCustomers = purchaseHistory.length;
   const totalResto = restos.length;
+  const totalOrders = purchaseHistory.reduce((total, purchase) => total + purchase.menuItem.length, 0);
   const sortedPurchaseHistory = [...purchaseHistory].reverse();
+  
+  const totalMenuQty = purchaseHistory.reduce((total, purchase) => {
+    // Sum the quantity of each menuItem in the current purchase
+    const purchaseQty = purchase.menuItem.reduce((purchaseTotal, menuItem) => {
+      return purchaseTotal + menuItem.qty;
+    }, 0);
+    // Add the purchase's total quantity to the running total
+    return total + purchaseQty;
+  }, 0);
+
 
   const columns = [
     {
@@ -109,6 +121,7 @@ const DashboardPage = () => {
           '#222831',
           '#31363F'
         ],
+                
         borderWidth: 1,
       },
     ],
@@ -163,47 +176,38 @@ const DashboardPage = () => {
     <div className='grid grid-flow-row gap-2'>
       <Typography.Title level={3}>Dashboard</Typography.Title>
       {/* <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'> */}
-      <div className='grid grid-cols-4 gap-2'>
+      <div className='grid grid-cols-5 gap-2'>
         <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
         <CardDashboard title={"Total Restaurants"} value={totalResto} icon={<RestOutlined />} />
         <CardDashboard title={"Customers"} value={totalCustomers} icon={<TeamOutlined />} />
+        <CardDashboard title={"Total Orders"} value={totalOrders} icon={<ShoppingCartOutlined />} />
         <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
       </div>
 
       {/* </div> */}
       <div className='space-y-5'>
-        <h1 className='text-xl'>Overview</h1>
+        {/* <h1 className='text-xl'>Overview</h1> */}
         <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
-          <div className='border rounded-md p-5'>
+          <div className='bg-[#FAFAFA] rounded-md p-5'>
             <div className='flex items-center gap-3'>
               <BarChartOutlined />
-              <h3 className='text-sm'>Restaurant Revenue</h3>
+              <h3 className='text-[18px]'>Restaurant Revenue</h3>
             </div>
             <div className='p-5 h-full flex items-center justify-center'>
-              <BarChart data={barChartData} />            
+              <BarChart data={barChartData} />
             </div>
           </div>
 
           {/* pie chart card */}
-          <div className='border rounded-md p-5'>
+          <div className='bg-[#FAFAFA] rounded-md p-5'>
             <div className='flex items-center gap-3'>
               <PieChartOutlined />
-              <h3 className='text-sm'>Restaurant Sales Quantity Breakdown</h3>
+              <h3 className='text-[18px]'>Restaurant Sales Quantity Breakdown</h3>
             </div>
-            <div className='p-5 flex items-center justify-center'>
+            <div className='p-5 flex h-full items-center justify-center'>
               <PieChart data={pieChartData} />
             </div>
           </div>
-
-          {/* <div className='border p-5 rounded-md'>
-            <div className='flex items-center gap-3'>
-              <TagsOutlined />
-              <h3 className='text-sm'>Latest Purchase</h3>
-            </div>
-            <div className='overflow-auto'>
-              <Table columns={columns} dataSource={sortedPurchaseHistory} pagination={{ pageSize: 3 }} />
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
