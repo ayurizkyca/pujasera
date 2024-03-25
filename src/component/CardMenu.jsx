@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Typography, Tooltip, Button, Modal } from 'antd';
+import {
+  Card,
+  Typography,
+  Tooltip,
+  Button,
+  Modal,
+  message,
+} from 'antd';
 const { Meta } = Card;
 import {
   DeleteOutlined,
@@ -9,8 +16,31 @@ import ButtonBasic from './ButtonBasic';
 import { formatRupiah } from '../util/format';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuActions } from '../redux/menu';
+import { cartActions } from '../redux/cart.js'
+import { useParams } from 'react-router-dom';
 
-const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, addCart, deleteMenu, editMenu }) => {
+
+
+const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, deleteMenu, editMenu }) => {
+  const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
+  const restos = useSelector((state) => state.menu.resto);
+  const resto = restos.find((resto) => resto.id === idResto);
+  const dispatch = useDispatch()
+  // Add to Cart
+  const addToCartHandler = () => {
+    if (stock > 0) {
+      if (isCustEmpty === true) {
+        dispatch(cartActions.toggleDrawer(false));
+        dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
+      } else {
+        dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
+        dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
+        message.success("item added");
+      }
+    } else {
+      message.error("item out of stock");
+    }
+  };
 
   return (
     <div className=''>
@@ -53,7 +83,9 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, addC
               <h1 className='font-bold'>Stok : {stock}</h1>
               <h1 className='font-bold text-sm text-primary'>{formatRupiah(price)}</h1>
             </div>
-            <ButtonBasic title={"add to cart"} onClick={addCart} textColor={'primary'} color={'secondary'} />
+            {/* <ButtonBasic title={"add to cart"} onClick={addCart} textColor={'primary'} color={'secondary'} /> */}
+            <ButtonBasic title={"add to cart"} onClick={addToCartHandler} textColor={'primary'} color={'secondary'} />
+
             {/* <Button className="bg-secondary text-primary w-full font-bold border-none hover:bg-primary">add to chart</Button> */}
           </div>
         </div>

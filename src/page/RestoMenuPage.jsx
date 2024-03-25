@@ -3,7 +3,6 @@ import CardMenu from '../component/CardMenu.jsx'
 import { Link, useParams } from 'react-router-dom'
 import { Typography, Modal, Form, Input, message, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { cartActions } from '../redux/cart.js'
 import ButtonBasic from '../component/ButtonBasic.jsx'
 import { menuActions } from '../redux/menu.js'
 import { v4 as uuidv4 } from 'uuid';
@@ -16,7 +15,6 @@ import { ROUTES } from '../constant/routesConstant.jsx'
 const RestoMenuPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
   const restos = useSelector((state) => state.menu.resto);
   const resto = restos.find((resto) => resto.id === id);
   const [menuToDelete, setMenuToDelete] = useState(null);
@@ -91,26 +89,6 @@ const RestoMenuPage = () => {
     console.log("nilai menuToEdit telah berubah", menuToEdit);
   }, [menuToEdit]);
 
-  // Add to Cart
-  const addToCartHandler = (idResto, namaResto, id, name, price, stock) => {
-    console.log(" add to chart id resto", idResto)
-    console.log("add to chart id menu", id)
-    console.log("add to chart ini stock", stock)
-    if (stock > 0) {
-      if (isCustEmpty === true) {
-        dispatch(cartActions.toggleDrawer(false));
-        dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
-      } else {
-        dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
-        dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
-        message.success("item added");
-      }
-    } else {
-      message.error("item out of stock");
-    }
-
-  };
-
   // Add New Menu
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
   const showAddMenu = () => {
@@ -178,7 +156,6 @@ const RestoMenuPage = () => {
                   price={card.price}
                   stock={card.stock}
                   idResto={resto.id}
-                  addCart={() => addToCartHandler(resto.id, resto.title, card.id, card.name, card.price, card.stock)}
                   deleteMenu={showDeleteConfirm}
                   editMenu={showModalEdit}
                 />
