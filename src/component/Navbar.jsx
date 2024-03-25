@@ -12,7 +12,6 @@ import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate, Link } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
-import { COLORS } from '../constant/propertiesConstant'
 import { menuActions } from '../redux/menu'
 
 
