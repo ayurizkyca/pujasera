@@ -8,14 +8,12 @@ import {
   WalletOutlined,
   TeamOutlined,
   TrophyOutlined,
-  TagsOutlined,
   BarChartOutlined,
   PieChartOutlined,
   RestOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { formatRupiah } from '../util/format';
-import menu from '../redux/menu';
 
 const DashboardPage = () => {
   const purchaseHistory = useSelector(state => state.cart.purchaseHistory);
@@ -26,16 +24,6 @@ const DashboardPage = () => {
   const totalOrders = purchaseHistory.reduce((total, purchase) => total + purchase.menuItem.length, 0);
   const sortedPurchaseHistory = [...purchaseHistory].reverse();
   
-  const totalMenuQty = purchaseHistory.reduce((total, purchase) => {
-    // Sum the quantity of each menuItem in the current purchase
-    const purchaseQty = purchase.menuItem.reduce((purchaseTotal, menuItem) => {
-      return purchaseTotal + menuItem.qty;
-    }, 0);
-    // Add the purchase's total quantity to the running total
-    return total + purchaseQty;
-  }, 0);
-
-
   const columns = [
     {
       title: 'Date',
@@ -175,7 +163,6 @@ const DashboardPage = () => {
   return (
     <div className='grid grid-flow-row gap-2'>
       <Typography.Title level={3}>Dashboard</Typography.Title>
-      {/* <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'> */}
       <div className='grid grid-cols-5 gap-2'>
         <CardDashboard title={"Revenue"} value={formatRupiah(totalRevenue)} icon={<WalletOutlined />} />
         <CardDashboard title={"Total Restaurants"} value={totalResto} icon={<RestOutlined />} />
@@ -184,9 +171,7 @@ const DashboardPage = () => {
         <CardDashboard title={"Favorite Restaurant"} value={favoriteResto} icon={<TrophyOutlined />} />
       </div>
 
-      {/* </div> */}
       <div className='space-y-5'>
-        {/* <h1 className='text-xl'>Overview</h1> */}
         <div className='grid grid-grid-cols-1 lg:grid-cols-2 gap-5'>
           <div className='bg-[#FAFAFA] rounded-md p-5'>
             <div className='flex items-center gap-3'>
@@ -198,7 +183,7 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* pie chart card */}
+          {/* chart card */}
           <div className='bg-[#FAFAFA] rounded-md p-5'>
             <div className='flex items-center gap-3'>
               <PieChartOutlined />

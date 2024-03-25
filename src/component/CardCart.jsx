@@ -15,8 +15,8 @@ const CardCart = () => {
     const dispatch = useDispatch();
 
     const incrementQuantity = (idResto, idMenu, stock) => {
-        dispatch(cartActions.incrementQuantity({ idResto, idMenu }));
         if (stock > 0) {
+            dispatch(cartActions.incrementQuantity({ idResto, idMenu }));
             dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
         } else {
             message.error("Item out of stock")
@@ -28,13 +28,17 @@ const CardCart = () => {
         if (qty > 1) {
             dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock + 1 }));
         } else {
-            // setShowModalDecrement(true)
-            dispatch(cartActions.deleteMenu({ idResto, idMenu }))
+            // dispatch(cartActions.deleteMenu({ idResto, idMenu }))
         }
     };
 
-    const deleteItem = (idResto, idMenu, stock) => {
+    const deleteItem = (idResto, idMenu, qty, stock) => {
+        console.log("id resto", idResto)
+        console.log("id menu", idMenu)
+        console.log("qty", qty)
+        console.log("stock", stock)
         dispatch(cartActions.deleteMenu({ idResto, idMenu }))
+        dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock + qty }));
     }
 
     return (
@@ -59,7 +63,7 @@ const CardCart = () => {
                                     subTotal={menu.qty * menu.harga}
                                     incrementClick={() => incrementQuantity(resto.idResto, menu.idMenu, menu.stock)}
                                     decrementClick={() => decrementQuantity(resto.idResto, menu.idMenu, menu.stock, menu.qty)}
-                                    deleteItemClick={() => deleteItem(resto.idResto, menu.idMenu, menu.stock)}
+                                    deleteItemClick={() => deleteItem(resto.idResto, menu.idMenu, menu.qty, menu.stock)}
                                 />
                             ))}
                             <div className='flex justify-between pt-2'>

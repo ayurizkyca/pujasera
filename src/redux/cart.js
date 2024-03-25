@@ -28,7 +28,7 @@ const cartSlice = createSlice({
 
                     if (existingMenuIndex !== -1) {
                         existingResto.menu[existingMenuIndex].qty += qty;
-                        existingResto.menu[existingMenuIndex].stock -= qty + 1;
+                        existingResto.menu[existingMenuIndex].stock -= qty;
                     } else {
                         existingResto.menu.push({ idMenu, namaMenu, harga, qty, stock: stock - qty });
                     }
@@ -56,7 +56,7 @@ const cartSlice = createSlice({
             state.total = 0;
         },
         deleteMenu(state, action) {
-            const { idResto, idMenu, stock } = action.payload;
+            const { idResto, idMenu } = action.payload;
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
             if (resto) {
                 const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
@@ -64,11 +64,7 @@ const cartSlice = createSlice({
                     const deletedItem = resto.menu.splice(menuItemIndex, 1)[0];
                     resto.subtotal -= deletedItem.harga * deletedItem.qty;
                     state.total -= deletedItem.harga * deletedItem.qty;
-                    //tambahan
-                    resto.menu[menuItemIndex].stock += deletedItem.qty;
-                    // if (resto.menu.length === 0) {
-                    //     state.menuItem = state.menuItem.filter(item => item.idResto !== idResto);
-                    // }
+                    // resto.menu[menuItemIndex].stock += deletedItem.qty;
                 }
             }
         },
@@ -88,7 +84,7 @@ const cartSlice = createSlice({
                         existingResto.menu[existingMenuIndex].stock -= qty;
                         // existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
                     } else {
-                        existingResto.menu.push({ idMenu, namaMenu, harga, qty, stock });
+                        existingResto.menu.push({ idMenu, namaMenu, harga, qty, stock: stock - qty });
                     }
                     // Hitung ulang subtotal untuk restoran yang berubah
                     existingResto.subtotal = existingResto.menu.reduce((acc, item) => acc + (item.harga * item.qty), 0);
@@ -122,23 +118,95 @@ const cartSlice = createSlice({
                     resto.subtotal += menuItem.harga;
                     state.total += menuItem.harga;
                 }
+
             }
         },
 
+        // decrementQuantity(state, action) {
+        //     const { idResto, idMenu } = action.payload;
+        //     const resto = state.menuItem.find(resto => resto.idResto === idResto);
+        //     if (resto) {
+        //         const menuItem = resto.menu.find(item => item.idMenu === idMenu);
+        //         if (menuItem.qty > 1) {
+        //             menuItem.qty -= 1;
+        //             menuItem.stock += 1;
+        //             menuItem.subtotal -= menuItem.harga;
+        //             resto.subtotal -= menuItem.harga;
+        //             state.total -= menuItem.harga;
+        //         }else{
+        //             const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
+        //             if (menuItemIndex !== -1) {
+        //                 const deletedItem = resto.menu.splice(menuItemIndex, 1)[0];
+        //                 resto.subtotal -= deletedItem.harga * deletedItem.qty;
+        //                 state.total -= deletedItem.harga * deletedItem.qty;
+        //             }
+        //         }
+        //     }
+        // },
+
         decrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
-            const resto = state.menuItem.find(resto => resto.idResto === idResto);
-            if (resto) {
-                const menuItem = resto.menu.find(item => item.idMenu === idMenu);
-                if (menuItem.qty > 0) {
-                    menuItem.qty -= 1;
-                    menuItem.stock += 1;
-                    menuItem.subtotal -= menuItem.harga;
-                    resto.subtotal -= menuItem.harga;
-                    state.total -= menuItem.harga;
+            const restoIndex = state.menuItem.findIndex(resto => resto.idResto === idResto);
+
+            if (restoIndex !== -1) {
+                const resto = state.menuItem[restoIndex];
+                const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
+
+                if (menuItemIndex !== -1) {
+                    const menuItem = resto.menu[menuItemIndex];
+                    console.log("redux menu stock", menuItem.stock)
+
+                    if (menuItem.qty > 1) {
+                        menuItem.qty -= 1;
+                        menuItem.stock += 1;
+                        menuItem.subtotal -= menuItem.harga;
+                        resto.subtotal -= menuItem.harga;
+                        state.total -= menuItem.harga;
+                    } else {
+                        resto.menu.splice(menuItemIndex, 1);
+                        resto.subtotal -= menuItem.harga;
+                        state.total -= menuItem.harga * menuItem.qty;
+
+                        if (resto.menu.length === 0) {
+                            state.menuItem.splice(restoIndex, 1);
+                        }
+                    }
                 }
             }
         },
+
+
+        // decrementQuantity(state, action) {
+        //     const { idResto, idMenu } = action.payload;
+
+        //     const restoIndex = state.menuItem.findIndex(resto => resto.idResto === idResto);
+        //     if (restoIndex === -1) return;
+
+        //     const resto = state.menuItem[restoIndex];
+        //     const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
+        //     if (menuItemIndex === -1) return;
+
+        //     const menuItem = resto.menu[menuItemIndex];
+
+        //     if (menuItem.qty > 1) {
+        //         menuItem.qty -= 1;
+        //         menuItem.stock += 1;
+        //     } else {
+        //         resto.menu.splice(menuItemIndex, 1);
+        //     }
+
+        //     const priceDecrease = menuItem.harga;
+        //     const totalDecrease = menuItem.harga * menuItem.qty;
+
+        //     resto.subtotal -= priceDecrease;
+        //     state.total -= totalDecrease;
+
+        //     // Hapus restoran jika tidak ada lagi item di dalamnya
+        //     if (resto.menu.length === 0) {
+        //         state.menuItem.splice(restoIndex, 1);
+        //     }
+        // },
+          
 
         clearCart(state) {
             const currentDate = new Date(Date.now());

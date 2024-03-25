@@ -52,13 +52,6 @@ const HistoryPage = () => {
       ? true
       : moment(item.date, 'DD/MM/YYYY').isSameOrAfter(moment(dateRange[0], 'DD/MM/YYYY'), 'day') &&
       moment(item.date, 'DD/MM/YYYY').isSameOrBefore(moment(dateRange[1], 'DD/MM/YYYY'), 'day');
-    console.log("search text", searchText)
-    console.log("search text match", searchTextMatch)
-    console.log("date length", dateRange.length)
-    console.log("date range match", dateRangeMatch)
-    console.log("date range", dateRange)
-    console.log("item date", item.date)
-
     return searchTextMatch && dateRangeMatch;
   });
 
@@ -67,6 +60,9 @@ const HistoryPage = () => {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
+      // sorter: (a, b) => {
+      //   return moment(a.date, 'DD/MM/YYYY').unix() - moment(b.date, 'DD/MM/YYYY').unix();
+      // },
     },
     {
       title: 'Customer',
@@ -137,9 +133,10 @@ const HistoryPage = () => {
               disabledDate={disableFutureDates}
             />
           </Space>
-          <div className='border px-2 py-1 rounded-md w-fit h-[32px]'>
+          {/* sorting */}
+          {/* <div className='border px-2 py-1 rounded-md w-fit h-[32px]'>
             <SortAscendingOutlined />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className='overflow-auto'>

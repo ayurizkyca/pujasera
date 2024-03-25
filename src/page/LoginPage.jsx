@@ -16,7 +16,7 @@ export default function LoginPage() {
                         <p>Happy to See You Again</p>
                     </div>
                     <div className='flex justify-center w-[25vw] items-center'>
-                        <FormBasic></FormBasic>
+                        <FormBasic/>
                     </div>
                 </div>
             </div>

@@ -4,10 +4,10 @@ import { Card } from 'antd';
 
 const CardResto = ({ id, title, description, onClick, bgImage }) => (
     <Card
-        onClick={() => onClick(id)
-        }
+        onClick={() => onClick(id)}
         hoverable
-        title={<span style={{ 
+        title={
+        <span style={{ 
             fontSize: 20, 
             fontWeight: 'bold', 
             color: 'white'

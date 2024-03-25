@@ -101,8 +101,6 @@ const RestoMenuPage = () => {
             if (isCustEmpty === true) {
                 dispatch(cartActions.toggleDrawer(false));
                 dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1 , stock}));
-                // dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
-                // message.success("item added");
             } else {
                 dispatch(cartActions.addMenuItem({ idResto, namaResto, idMenu: id, namaMenu: name, harga: price, qty: 1, stock}));
                 dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));

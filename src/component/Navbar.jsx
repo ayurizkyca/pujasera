@@ -12,7 +12,6 @@ import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate, Link } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
-import { COLORS } from '../constant/propertiesConstant'
 import { menuActions } from '../redux/menu'
 
 
@@ -50,7 +49,10 @@ export default function Navbar() {
         setIsModalOpen(false);
     };
     const logoutClick = () => {
-        dispatch(authActions.logout());
+        setTimeout(() => {
+            dispatch(authActions.logout());
+            message.success("Logout Success");
+        }, 800)
     }
 
     //drawer
@@ -64,7 +66,7 @@ export default function Navbar() {
     }
     const [customerData, setCustomerData] = useState({
         customer: "",
-        meja: ""
+        meja: 0
     });
     const onFinish = (values) => {
         dispatch(cartActions.addCustomer(values));
@@ -74,14 +76,8 @@ export default function Navbar() {
         const { idResto, idMenu, stock } = menuPending;
         if (stock > 0) {
             dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
-            console.log("stock di dalam if", stock)
         }
-        console.log("ini adalah data menu on pending");
-        console.log("id resto", idResto)
-        console.log("id menu", idMenu)
-        console.log("stock", stock)
         dispatch(menuActions.updateStock(idResto, idMenu, stock - 1));
-        console.log("stok setelah berubah", stock)
         dispatch(cartActions.toggleDrawer(true));
     };
 
@@ -93,13 +89,10 @@ export default function Navbar() {
         });
     };
 
-
-
     const showCart = () => {
         navigate(ROUTES.CART);
     }
     const username = useSelector((state) => state.auth.username);
-    // const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
     const cartItemCount = useSelector((state) => {
         return state.cart.menuItem.reduce((acc, resto) => {
             return acc + resto.menu.reduce((acc, item) => acc + item.qty, 0);
