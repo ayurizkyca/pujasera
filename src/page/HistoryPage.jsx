@@ -10,7 +10,11 @@ import {
 } from 'antd';
 import { useSelector } from 'react-redux';
 import { formatRupiah } from '../util/format';
-import { ShoppingOutlined } from '@ant-design/icons';
+import {
+  ShoppingOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from '@ant-design/icons';
 import ButtonBasic from '../component/ButtonBasic';
 import moment from 'moment';
 
@@ -115,10 +119,10 @@ const HistoryPage = () => {
   };
 
   return (
-    <div>
-      <div className='flex justify-between'>
+    <div className='space-y-2'>
+      <div className='md:flex justify-between'>
         <Typography.Title level={3}>History</Typography.Title>
-        <div className='flex gap-2'>
+        <div className='md:flex gap-2 space-y-1 md:space-y-0'>
           <div className="search-container">
             <Search
               placeholder="Customer or Table"
@@ -133,6 +137,9 @@ const HistoryPage = () => {
               disabledDate={disableFutureDates}
             />
           </Space>
+          <div className='border px-2 py-1 rounded-md w-fit h-[32px]'>
+            <SortAscendingOutlined />
+          </div>
         </div>
       </div>
       <div className='overflow-auto'>

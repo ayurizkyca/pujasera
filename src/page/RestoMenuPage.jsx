@@ -60,11 +60,7 @@ const RestoMenuPage = () => {
         console.log("id show", card.id)
     };
 
-    // const handleOkEdit = () => {
-    //     form.submit();
-    // };
-
-    const handleCancelEdit = () => {
+     const handleCancelEdit = () => {
         setIsModalEditOpen(false);
         setMenuToEdit(null);
         form.resetFields();
