@@ -15,7 +15,7 @@ const CartPage = () => {
     const total = useSelector((state) => state.cart.total)
     const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
     const customer = useSelector((state) => state.cart.customer)
-    const meja = useSelector((state) => state.cart.meja);
+    const table = useSelector((state) => state.cart.table);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleCheckout = () => {
@@ -54,7 +54,7 @@ const CartPage = () => {
             </div>
             <div className='px-8 py-3'>
                 <h1 className='text-xl font-medium'>Customer : {customer}</h1>
-                <h1 className='text-xl font-medium'>Table : {meja}</h1>
+                <h1 className='text-xl font-medium'>Table : {table}</h1>
             </div>
             <ul className='flex-grow'>
                 <CardCart />

@@ -59,16 +59,14 @@ const SideBar = () => {
         <Menu className='sticky left-0' defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleClick} />
       </Sider>
       <Layout className="">
-        <Header className='flex items-center'
+        <Header className='md:flex items-center hidden'
           style={{
             padding: 0,
             background: colorBgContainer,
-            minHeight: 80,
           }}
         >
           <h1 className='pl-[20px] text-primary font-bold text-2xl z-1'>Hello, {username}. Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
         </Header>
-        {/* <Navbar/> */}
         
         <Content
           style={{

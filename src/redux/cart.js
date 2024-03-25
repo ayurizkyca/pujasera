@@ -37,7 +37,7 @@ const cartSlice = createSlice({
                     const newResto = {
                         idResto,
                         namaResto,
-                        menu: [{ idMenu, namaMenu, harga, qty, stock: stock-1 }],
+                        menu: [{ idMenu, namaMenu, harga, qty, stock: stock - 1 }],
                         subtotal: harga * qty
 
                     };
@@ -56,7 +56,7 @@ const cartSlice = createSlice({
             state.total = 0;
         },
         deleteMenu(state, action) {
-            const { idResto, idMenu } = action.payload;
+            const { idResto, idMenu, stock } = action.payload;
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
             if (resto) {
                 const menuItemIndex = resto.menu.findIndex(item => item.idMenu === idMenu);
@@ -64,6 +64,11 @@ const cartSlice = createSlice({
                     const deletedItem = resto.menu.splice(menuItemIndex, 1)[0];
                     resto.subtotal -= deletedItem.harga * deletedItem.qty;
                     state.total -= deletedItem.harga * deletedItem.qty;
+                    //tambahan
+                    resto.menu[menuItemIndex].stock += deletedItem.qty;
+                    // if (resto.menu.length === 0) {
+                    //     state.menuItem = state.menuItem.filter(item => item.idResto !== idResto);
+                    // }
                 }
             }
         },
@@ -119,8 +124,8 @@ const cartSlice = createSlice({
                 }
             }
         },
-        
-       decrementQuantity(state, action) {
+
+        decrementQuantity(state, action) {
             const { idResto, idMenu } = action.payload;
             const resto = state.menuItem.find(resto => resto.idResto === idResto);
             if (resto) {

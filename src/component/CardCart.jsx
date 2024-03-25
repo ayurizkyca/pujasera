@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ListMenuCart from './ListMenuCart';
@@ -9,41 +9,31 @@ import { menuActions } from '../redux/menu';
 
 
 const CardCart = () => {
+    const [showModalDecrement, setShowModalDecrement] = useState(false);
     const listMenu = useSelector((state) => state.cart.menuItem);
     const stock = useSelector((state) => state.menu.stock);
     const dispatch = useDispatch();
 
     const incrementQuantity = (idResto, idMenu, stock) => {
         dispatch(cartActions.incrementQuantity({ idResto, idMenu }));
-        console.log("fungsi di card, id resto", idResto)
-        console.log("fungsi di card, id menu", idMenu)
-        console.log("stock", stock)
-        console.log("stock setelah dispatch", stock)
-
         if (stock > 0) {
-            dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock-1}));
-
-            console.log("SETELAH IF")
-            console.log("fungsi di card, id resto", idResto)
-            console.log("fungsi di card, id resto", idMenu)
-        }else{
+            dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
+        } else {
             message.error("Item out of stock")
         }
     };
 
     const decrementQuantity = (idResto, idMenu, stock, qty) => {
-        console.log("decrement")
-        console.log("qty", qty)
-        console.log("stock", stock)
         dispatch(cartActions.decrementQuantity({ idResto, idMenu }));
-        if(qty>1){
-            dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock + 1}));
-        }else{
+        if (qty > 1) {
+            dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock + 1 }));
+        } else {
+            // setShowModalDecrement(true)
             dispatch(cartActions.deleteMenu({ idResto, idMenu }))
         }
     };
 
-    const deleteItem = (idResto, idMenu) => {
+    const deleteItem = (idResto, idMenu, stock) => {
         dispatch(cartActions.deleteMenu({ idResto, idMenu }))
     }
 
@@ -80,6 +70,14 @@ const CardCart = () => {
                     ))}
                 </ul>
             </div>
+            <Modal
+                title="Delete Confirmation"
+                open={showModalDecrement}
+                onOk={() => setShowModalDecrement(false)}
+                onCancel={() => setShowModalDecrement(false)}
+            >
+                <p>Are you sure you want to delete this item?</p>
+            </Modal>
         </div>
     );
 }

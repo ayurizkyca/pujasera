@@ -12,6 +12,7 @@ import { Drawer, Button, Form, Input, Badge, message, Modal } from 'antd';
 import { cartActions } from '../redux/cart'
 import { useNavigate, Link } from 'react-router-dom'
 import { ROUTES } from '../constant/routesConstant'
+import { COLORS } from '../constant/propertiesConstant'
 import { menuActions } from '../redux/menu'
 
 
@@ -73,6 +74,7 @@ export default function Navbar() {
         const { idResto, idMenu, stock } = menuPending;
         if (stock > 0) {
             dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
+            console.log("stock di dalam if", stock)
         }
         console.log("ini adalah data menu on pending");
         console.log("id resto", idResto)
