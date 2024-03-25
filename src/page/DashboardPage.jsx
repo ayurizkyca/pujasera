@@ -23,7 +23,7 @@ const DashboardPage = () => {
   const totalResto = restos.length;
   const totalOrders = purchaseHistory.reduce((total, purchase) => total + purchase.menuItem.length, 0);
   const sortedPurchaseHistory = [...purchaseHistory].reverse();
-  
+
   const columns = [
     {
       title: 'Date',
@@ -109,7 +109,7 @@ const DashboardPage = () => {
           '#222831',
           '#31363F'
         ],
-                
+
         borderWidth: 1,
       },
     ],

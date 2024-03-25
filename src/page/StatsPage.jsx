@@ -6,7 +6,7 @@ export default function StatsPage() {
   return (
     <div>
       <Typography.Title>Report Page</Typography.Title>
-      <Accordion/>
+      <Accordion />
     </div>
   )
 }

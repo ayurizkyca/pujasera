@@ -5,8 +5,8 @@ import Navbar from "../component/Navbar"
 export default function HomePage() {
   return (
     <div className='h-[100vh]'>
-      <Navbar/>
-      <SideBar/>
+      <Navbar />
+      <SideBar />
     </div>
   )
 }

@@ -14,24 +14,24 @@ import ReportPage from '../page/ReportPage';
 import DashboardPage from '../page/DashboardPage';
 
 const RoutesConfig = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<LoginPage />} />
-                <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-                <Route path={ROUTES.HOME} element={<PrivateRoute><HomePage /></PrivateRoute>}>
-                    <Route path={ROUTES.PORTAL_RESTO} element={<PortalRestoPage />} />
-                    <Route path={ROUTES.HISTORY} element={<HistoryPage />} />
-                    <Route path={ROUTES.STATS} element={<StatsPage />} />
-                    <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
-                    <Route path={ROUTES.REPORT} element={<ReportPage />} />
-                    <Route path={ROUTES.DETAIL_RESTO + '/:id'} element={<RestoMenuPage />} />
-                </Route>
-                <Route path='*' element={<NotFoundPage />} />
-                <Route path={ROUTES.CART} element={<PrivateRoute><CartPage /></PrivateRoute>} />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<LoginPage />} />
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.HOME} element={<PrivateRoute><HomePage /></PrivateRoute>}>
+          <Route path={ROUTES.PORTAL_RESTO} element={<PortalRestoPage />} />
+          <Route path={ROUTES.HISTORY} element={<HistoryPage />} />
+          <Route path={ROUTES.STATS} element={<StatsPage />} />
+          <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+          <Route path={ROUTES.REPORT} element={<ReportPage />} />
+          <Route path={ROUTES.DETAIL_RESTO + '/:id'} element={<RestoMenuPage />} />
+        </Route>
+        <Route path='*' element={<NotFoundPage />} />
+        <Route path={ROUTES.CART} element={<PrivateRoute><CartPage /></PrivateRoute>} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default RoutesConfig;

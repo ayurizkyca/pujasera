@@ -67,7 +67,7 @@ const SideBar = () => {
         >
           <h1 className='pl-[20px] text-primary font-bold text-2xl z-1'>Hello, {username}. Welcome to Pujasera, your one-stop destination for a variety of delicious snacks and treats!</h1>
         </Header>
-        
+
         <Content
           style={{
             margin: '16px 16px',

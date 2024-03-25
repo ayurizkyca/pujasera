@@ -12,7 +12,7 @@ const items = [
   },
 ];
 
-const InputDropdown = ({title}) => (
+const InputDropdown = ({ title }) => (
   <Dropdown
     menu={{
       items,
