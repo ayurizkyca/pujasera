@@ -135,7 +135,6 @@ const RestoMenuPage = () => {
             ]}
           >
             <Input onChange={onChange} value={menuData.imageUrl} />
-            {/* <UploadCustom /> */}
           </Form.Item>
           <Form.Item
             label="Price"
