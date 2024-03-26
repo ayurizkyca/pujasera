@@ -15,7 +15,7 @@ const CartPage = () => {
   const total = useSelector((state) => state.cart.total)
   const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
   const customer = useSelector((state) => state.cart.customer)
-  const table = useSelector((state) => state.cart.table);
+  const table = useSelector((state) => state.cart.meja);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCheckout = () => {
