@@ -6,7 +6,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 
-const ListMenuCart = ({ namaMenu, harga, qty, subTotal, stock, incrementClick, decrementClick, deleteItemClick }) => {
+const ListMenuCart = ({ namaMenu, harga, qty, subTotal, incrementClick, decrementClick, deleteItemClick }) => {
   return (
     <div className='grid grid-cols-2'>
       <h2 className=''>{namaMenu}</h2>
