@@ -11,11 +11,9 @@ import { ROUTES } from '../constant/routesConstant';
 import { formatRupiah } from '../util/format';
 
 const CartPage = () => {
-  const menuItem = useSelector(state => state.cart.menuItem);
   const total = useSelector((state) => state.cart.total)
-  const cartItemCount = useSelector((state) => state.cart.menuItem.reduce((acc, resto) => acc + resto.menu.length, 0));
   const customer = useSelector((state) => state.cart.customer)
-  const table = useSelector((state) => state.cart.meja);
+  const table = useSelector((state) => state.cart.table);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCheckout = () => {
