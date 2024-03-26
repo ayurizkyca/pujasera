@@ -20,7 +20,7 @@ import { menuActions } from '../redux/menu';
 import { cartActions } from '../redux/cart.js'
 
 
-const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, editMenu }) => {
+const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) => {
   const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
   const restos = useSelector((state) => state.menu.resto);
   const resto = restos.find((resto) => resto.id === idResto);
@@ -69,13 +69,6 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, edit
       stock: stock
     });
     setIsModalEditOpen(true);
-    console.log("id menu", id)
-    console.log("id resto", idResto)
-    console.log("name", name)
-    console.log("description", description)
-    console.log("imageUrl", imageUrl)
-    console.log("price", price)
-    console.log("stock", stock)
   };
 
   const handleCancelEdit = () => {
@@ -125,7 +118,6 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, edit
                     <h1 className='truncate'>{name}</h1>
                   </Tooltip>
                   <div>
-                    {/* <EditOutlined className=' text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={() => editMenu({ id, idResto, name, description, imageUrl, price, stock })} /> */}
                     <EditOutlined className=' text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={showModalEdit} />
                     <DeleteOutlined className='text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={showDeleteConfirm} />
                   </div>
@@ -141,10 +133,7 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, edit
               <h1 className='font-bold'>Stok : {stock}</h1>
               <h1 className='font-bold text-sm text-primary'>{formatRupiah(price)}</h1>
             </div>
-            {/* <ButtonBasic title={"add to cart"} onClick={addCart} textColor={'primary'} color={'secondary'} /> */}
             <ButtonBasic title={"add to cart"} onClick={addToCartHandler} textColor={'primary'} color={'secondary'} />
-
-            {/* <Button className="bg-secondary text-primary w-full font-bold border-none hover:bg-primary">add to chart</Button> */}
           </div>
         </div>
       </Card>
