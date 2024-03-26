@@ -5,13 +5,17 @@ import {
   Space,
   DatePicker,
 } from 'antd';
-
+import moment from 'moment';
 import Search from 'antd/es/input/Search';
 const { RangePicker } = DatePicker;
 
 const ReportPage = () => {
   const [searchText, setSearchText] = useState('');
   const [dateRange, setDateRange] = useState([]);
+
+  const disableFutureDates = (currentDate) => {
+    return currentDate && currentDate > moment().endOf("day");
+  };
 
   const onChangeDatePicker = (dates) => {
     if (!dates || dates.length === 0) {
@@ -37,6 +41,7 @@ const ReportPage = () => {
             <RangePicker
               onChange={onChangeDatePicker}
               format="DD/MM/YYYY"
+              disabledDate={disableFutureDates}
             />
           </Space>
         </div>

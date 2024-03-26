@@ -23,6 +23,7 @@ const { RangePicker } = DatePicker;
 
 const HistoryPage = () => {
   const purchaseHistory = useSelector((state) => state.cart.purchaseHistory);
+  // const purchaseHistory = useSelector((state) => [...state.cart.purchaseHistory]);
   const [detailVisible, setDetailVisible] = useState(false);
   const [detail, setDetail] = useState("");
   const [searchText, setSearchText] = useState('');
@@ -40,7 +41,7 @@ const HistoryPage = () => {
     }
   };
 
-  const filteredData = purchaseHistory.reverse().filter(item => {
+  const filteredData = [...purchaseHistory].reverse().filter(item => {
     const searchTextMatch = searchText
       ? Object.values(item).some(value =>
         typeof value === 'string' &&
