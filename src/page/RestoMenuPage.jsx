@@ -17,77 +17,6 @@ const RestoMenuPage = () => {
   const dispatch = useDispatch();
   const restos = useSelector((state) => state.menu.resto);
   const resto = restos.find((resto) => resto.id === id);
-  const [menuToDelete, setMenuToDelete] = useState(null);
-  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-  const [menuToEdit, setMenuToEdit] = useState(null);
-  const [form] = Form.useForm();
-  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
-
-  // Delete Menu
-  const showDeleteConfirm = (card) => {
-    setMenuToDelete(card);
-    setIsModalDeleteOpen(true);
-    console.log("card", menuToDelete)
-  };
-
-  const handleOkDelete = () => {
-    if (menuToDelete) {
-      dispatch(menuActions.deleteMenu({ idResto: id, idMenu: menuToDelete.id }));
-      setIsModalDeleteOpen(false);
-      setMenuToDelete(null);
-      message.success("Menu Deleted");
-    }
-  }
-
-  const handleCancelDelete = () => {
-    setIsModalDeleteOpen(false);
-  };
-
-  // Edit Menu
-  const showModalEdit = (card) => {
-    setMenuToEdit(card);
-    form.setFieldsValue({
-      name: card.name,
-      description: card.description,
-      imageUrl: card.imageUrl,
-      price: card.price,
-      stock: card.stock
-    });
-    setIsModalEditOpen(true);
-    console.log("id show", card.id)
-  };
-
-  const handleCancelEdit = () => {
-    setIsModalEditOpen(false);
-    setMenuToEdit(null);
-    form.resetFields();
-    console.log("ini adalah close tapi pakai cancel")
-  };
-
-  const onFinishEdit = (values) => {
-    const idMenu = uuidv4();
-    dispatch(menuActions.editMenu({
-      idResto: id,
-      idMenu: menuToEdit.id,
-      // idMenu: idMenu, 
-      menu: {
-        id: idMenu,
-        name: values.name,
-        description: values.description,
-        imageUrl: values.imageUrl,
-        price: values.price,
-        stock: values.stock
-      }
-    }));
-    setIsModalEditOpen(false);
-    setMenuToEdit(null);
-    message.success("successfully edited menu");
-    console.log("id on finish", idMenu)
-  };
-
-  useEffect(() => {
-    console.log("nilai menuToEdit telah berubah", menuToEdit);
-  }, [menuToEdit]);
 
   // Add New Menu
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
@@ -116,20 +45,20 @@ const RestoMenuPage = () => {
     dispatch(menuActions.addMenu({
       idResto: id,
       idMenu: idMenu,
-      // menu: { ...menuData }
       menu: {
         id: idMenu,
         name: values.name,
         description: values.description,
         imageUrl: values.imageUrl,
-        price: values.price,
-        stock: values.stock
+        price: Number(values.price),
+        stock: Number(values.stock)
       }
 
     }));
     message.success("successfully added menu");
     setIsAddMenuOpen(false);
   };
+
 
   return (
     <>
@@ -156,8 +85,6 @@ const RestoMenuPage = () => {
                   price={card.price}
                   stock={card.stock}
                   idResto={resto.id}
-                  deleteMenu={showDeleteConfirm}
-                  editMenu={showModalEdit}
                 />
               ))}
             </div>
@@ -235,97 +162,6 @@ const RestoMenuPage = () => {
               Add Menu
             </Button>
             {/* <ButtonBasic title={"Add Menu"} htmlType="submit" color={"secondary"} textColor={"primary"}/> */}
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* Modal Delete Menu */}
-      <Modal
-        title="Delete Menu"
-        open={isModalDeleteOpen}
-        onOk={handleOkDelete}
-        onCancel={handleCancelDelete}
-        okType='danger'
-        footer={false}
-      >
-        <p>Are you sure you want to delete this menu?</p>
-        <div className='flex gap-1 justify-end'>
-          <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancelDelete} />
-          <ButtonBasic title={"Yes"} onClick={handleOkDelete} textColor={"white"} color={"primary"} fontWeight={"semibold"} />
-        </div>
-      </Modal>
-
-      {/* Modal Edit Menu */}
-      <Modal
-        title="Edit Menu"
-        open={isModalEditOpen}
-        onCancel={handleCancelEdit}
-        okType='danger'
-        footer={false}
-      >
-        <Form
-          className='m-2 mt-5'
-          name="basic"
-          onFinish={onFinishEdit}
-          autoComplete="off"
-          layout='vertical'
-          form={form}
-          requiredMark={false}
-        >
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[
-              { required: true, message: 'Please input the name of the menu!' },
-              { min: 3, message: 'Name must be at least 3 characters!' }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Description"
-            name="description"
-            rules={[
-              { required: true, message: 'Please input the description of the menu!' },
-              { min: 3, message: 'Description must be at least 3 characters!' }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Image"
-            name="imageUrl"
-            rules={[
-              { required: true, message: 'Please input the image URL of the menu!' },
-              { type: 'url', message: 'Please input a valid image URL!' }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Price"
-            name="price"
-            rules={[
-              { required: true, message: 'Please input the price of the menu!' }
-            ]}
-          >
-            <Input type='number' />
-          </Form.Item>
-          <Form.Item
-            label="Stock"
-            name="stock"
-            rules={[
-              { required: true, message: 'Please input the stock of the menu!' }
-            ]}
-          >
-            <Input type='number' />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{ span: 20, offset: 18 }}
-          >
-            <Button type="primary" htmlType="submit" className='bg-primary'>
-              Update Menu
-            </Button>
           </Form.Item>
         </Form>
       </Modal>

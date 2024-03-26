@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
   Card,
-  Typography,
+  Input,
   Tooltip,
   Button,
+  Form,
   Modal,
   message,
 } from 'antd';
@@ -17,14 +18,15 @@ import { formatRupiah } from '../util/format';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuActions } from '../redux/menu';
 import { cartActions } from '../redux/cart.js'
-import { useParams } from 'react-router-dom';
 
 
-
-const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, deleteMenu, editMenu }) => {
+const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, editMenu }) => {
   const isCustEmpty = useSelector((state) => state.cart.isCustEmpty)
   const restos = useSelector((state) => state.menu.resto);
   const resto = restos.find((resto) => resto.id === idResto);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [form] = Form.useForm();
   const dispatch = useDispatch()
   // Add to Cart
   const addToCartHandler = () => {
@@ -40,6 +42,61 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, dele
     } else {
       message.error("item out of stock");
     }
+  };
+
+  // Delete Menu
+  const showDeleteConfirm = () => {
+    setIsModalDeleteOpen(true);
+  };
+
+  const handleOkDelete = () => {
+    dispatch(menuActions.deleteMenu({ idResto, idMenu: id }));
+    setIsModalDeleteOpen(false);
+    message.success("Menu Deleted");
+  }
+
+  const handleCancelDelete = () => {
+    setIsModalDeleteOpen(false);
+  };
+
+  // Edit Menu
+  const showModalEdit = () => {
+    form.setFieldsValue({
+      name: name,
+      description: description,
+      imageUrl: imageUrl,
+      price: price,
+      stock: stock
+    });
+    setIsModalEditOpen(true);
+    console.log("id menu", id)
+    console.log("id resto", idResto)
+    console.log("name", name)
+    console.log("description", description)
+    console.log("imageUrl", imageUrl)
+    console.log("price", price)
+    console.log("stock", stock)
+  };
+
+  const handleCancelEdit = () => {
+    setIsModalEditOpen(false);
+    form.resetFields();
+  };
+
+  const onFinishEdit = (values) => {
+    dispatch(menuActions.editMenu({
+      idResto: idResto,
+      idMenu: id,
+      menu: {
+        id: id,
+        name: values.name,
+        description: values.description,
+        imageUrl: values.imageUrl,
+        price: Number(values.price),
+        stock: Number(values.stock)
+      }
+    }));
+    setIsModalEditOpen(false);
   };
 
   return (
@@ -68,8 +125,9 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, dele
                     <h1 className='truncate'>{name}</h1>
                   </Tooltip>
                   <div>
-                    <EditOutlined className=' text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={() => editMenu({ id, idResto, name, description, imageUrl, price, stock })} />
-                    <DeleteOutlined className='text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={() => deleteMenu({ id, idResto })} />
+                    {/* <EditOutlined className=' text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={() => editMenu({ id, idResto, name, description, imageUrl, price, stock })} /> */}
+                    <EditOutlined className=' text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={showModalEdit} />
+                    <DeleteOutlined className='text-black hover:text-red-700 bg-white p-1 hover:bg-secondary' onClick={showDeleteConfirm} />
                   </div>
                 </div>
               }
@@ -90,6 +148,97 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock, dele
           </div>
         </div>
       </Card>
+
+      {/* Modal Delete Menu */}
+      <Modal
+        title="Delete Menu"
+        open={isModalDeleteOpen}
+        onOk={handleOkDelete}
+        onCancel={handleCancelDelete}
+        okType='danger'
+        footer={false}
+      >
+        <p>Are you sure you want to delete this menu?</p>
+        <div className='flex gap-1 justify-end'>
+          <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancelDelete} />
+          <ButtonBasic title={"Yes"} onClick={handleOkDelete} textColor={"white"} color={"primary"} fontWeight={"semibold"} />
+        </div>
+      </Modal>
+
+      {/* Modal Edit Menu */}
+      <Modal
+        title="Edit Menu"
+        open={isModalEditOpen}
+        onCancel={handleCancelEdit}
+        okType='danger'
+        footer={false}
+      >
+        <Form
+          className='m-2 mt-5'
+          name="basic"
+          onFinish={onFinishEdit}
+          autoComplete="off"
+          layout='vertical'
+          form={form}
+          requiredMark={false}
+        >
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: 'Please input the name of the menu!' },
+              { min: 3, message: 'Name must be at least 3 characters!' }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[
+              { required: true, message: 'Please input the description of the menu!' },
+              { min: 3, message: 'Description must be at least 3 characters!' }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Image"
+            name="imageUrl"
+            rules={[
+              { required: true, message: 'Please input the image URL of the menu!' },
+              { type: 'url', message: 'Please input a valid image URL!' }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Price"
+            name="price"
+            rules={[
+              { required: true, message: 'Please input the price of the menu!' }
+            ]}
+          >
+            <Input type='number' />
+          </Form.Item>
+          <Form.Item
+            label="Stock"
+            name="stock"
+            rules={[
+              { required: true, message: 'Please input the stock of the menu!' }
+            ]}
+          >
+            <Input type='number' />
+          </Form.Item>
+          <Form.Item
+            wrapperCol={{ span: 20, offset: 18 }}
+          >
+            <Button type="primary" htmlType="submit" className='bg-primary'>
+              Update Menu
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
