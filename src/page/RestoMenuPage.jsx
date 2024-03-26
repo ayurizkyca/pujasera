@@ -4,12 +4,13 @@ import { Link, useParams } from 'react-router-dom'
 import { Typography, Modal, Form, Input, message, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import ButtonBasic from '../component/ButtonBasic.jsx'
-import { menuActions } from '../redux/menu.js'
+import menu, { menuActions } from '../redux/menu.js'
 import { v4 as uuidv4 } from 'uuid';
 import {
   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import { ROUTES } from '../constant/routesConstant.jsx'
+import { addMenuToResto } from '../service/menuService.js'
 
 
 const RestoMenuPage = () => {
@@ -17,6 +18,26 @@ const RestoMenuPage = () => {
   const dispatch = useDispatch();
   const restos = useSelector((state) => state.menu.resto);
   const resto = restos.find((resto) => resto.id === id);
+
+  
+  const onFinish = (values) =>{
+    const addData = addMenuToResto(
+      restos, {
+        restoId: id, 
+        menu: {
+          id: uuidv4(),
+          name: values.name,
+          description: values.description,
+          imageUrl: values.imageUrl,
+          price: Number(values.price),
+          stock: Number(values.stock)
+        }
+      })
+      console.log(addData)
+    dispatch(menuActions.updateMenu(addData));
+    message.success("successfully added menu");
+    setIsAddMenuOpen(false);
+  }
 
   // Add New Menu
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
@@ -40,25 +61,24 @@ const RestoMenuPage = () => {
     });
   };
 
-  const handleAddMenu = (values) => {
-    const idMenu = uuidv4(); // Generate a UUID for idMenu
-    dispatch(menuActions.addMenu({
-      idResto: id,
-      idMenu: idMenu,
-      menu: {
-        id: idMenu,
-        name: values.name,
-        description: values.description,
-        imageUrl: values.imageUrl,
-        price: Number(values.price),
-        stock: Number(values.stock)
-      }
+  // const handleAddMenu = (values) => {
+  //   const idMenu = uuidv4(); // Generate a UUID for idMenu
+  //   dispatch(menuActions.addMenu({
+  //     idResto: id,
+  //     idMenu: idMenu,
+  //     menu: {
+  //       id: idMenu,
+  //       name: values.name,
+  //       description: values.description,
+  //       imageUrl: values.imageUrl,
+  //       price: Number(values.price),
+  //       stock: Number(values.stock)
+  //     }
 
-    }));
-    message.success("successfully added menu");
-    setIsAddMenuOpen(false);
-  };
-
+  //   }));
+  //   message.success("successfully added menu");
+  //   setIsAddMenuOpen(false);
+  // };
 
   return (
     <>
@@ -101,7 +121,8 @@ const RestoMenuPage = () => {
       >
         <Form className='m-2 mt-5'
           name="basic"
-          onFinish={handleAddMenu}
+          // onFinish={handleAddMenu}
+          onFinish={onFinish}
           autoComplete="off"
           layout='vertical'
           requiredMark={false}
@@ -160,7 +181,6 @@ const RestoMenuPage = () => {
             <Button type="primary" htmlType="submit" className='bg-primary'>
               Add Menu
             </Button>
-            {/* <ButtonBasic title={"Add Menu"} htmlType="submit" color={"secondary"} textColor={"primary"}/> */}
           </Form.Item>
         </Form>
       </Modal>
