@@ -18,6 +18,7 @@ import { formatRupiah } from '../util/format';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuActions } from '../redux/menu';
 import { cartActions } from '../redux/cart.js'
+import { deleteMenuFromResto, editMenuInResto } from '../service/menuService.js';
 
 
 const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) => {
@@ -50,7 +51,8 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
   };
 
   const handleOkDelete = () => {
-    dispatch(menuActions.deleteMenu({ idResto, idMenu: id }));
+    const deleteMenu = deleteMenuFromResto(restos, { restoId: idResto, menuId: id })
+    dispatch(menuActions.updateMenu(deleteMenu));
     setIsModalDeleteOpen(false);
     message.success("Menu Deleted");
   }
@@ -77,9 +79,10 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
   };
 
   const onFinishEdit = (values) => {
-    dispatch(menuActions.editMenu({
-      idResto: idResto,
-      idMenu: id,
+    const editData = editMenuInResto(
+      restos, {
+      restoId: idResto,
+      menuId: id,
       menu: {
         id: id,
         name: values.name,
@@ -88,7 +91,9 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
         price: Number(values.price),
         stock: Number(values.stock)
       }
-    }));
+    })
+    dispatch(menuActions.updateMenu(editData));
+    message.success("Menu Edited");
     setIsModalEditOpen(false);
   };
 
