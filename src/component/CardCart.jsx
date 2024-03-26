@@ -11,7 +11,6 @@ import { menuActions } from '../redux/menu';
 const CardCart = () => {
   const [showModalDecrement, setShowModalDecrement] = useState(false);
   const listMenu = useSelector((state) => state.cart.menuItem);
-  const stock = useSelector((state) => state.menu.stock);
   const dispatch = useDispatch();
 
   const incrementQuantity = (idResto, idMenu, stock) => {
@@ -47,12 +46,10 @@ const CardCart = () => {
         <ul className='gap-2'>
           {listMenu.map(resto => (
             <div className='border p-4' key={resto.idResto}>
-              {/* <div className='flex justify-between'> */}
               <div className='flex gap-2'>
                 <ShoppingOutlined />
                 <h1 className='font-medium'>{resto.namaResto}</h1>
               </div>
-              {/* </div> */}
               {resto.menu.map(menu => (
                 <ListMenuCart
                   key={menu.id}
