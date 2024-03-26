@@ -17,7 +17,7 @@ const RoutesConfig = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<LoginPage />} />
+        <Route path={ROUTES.ROOT} element={<LoginPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.HOME} element={<PrivateRoute><HomePage /></PrivateRoute>}>
           <Route path={ROUTES.PORTAL_RESTO} element={<PortalRestoPage />} />
