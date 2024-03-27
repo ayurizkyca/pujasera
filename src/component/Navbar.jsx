@@ -21,23 +21,30 @@ export default function Navbar() {
   const navigate = useNavigate();
   const customerExist = useSelector((state) => state.cart.customer);
   const tableExist = useSelector((state) => state.cart.meja);
-  const menuPending = useSelector((state) => state.cart.pendingAddToCart)
+  const menuPending = useSelector((state) => state.cart.pendingAddToCart);
+  const menuItems = useSelector((state) => state.cart.menuItem)
 
   //modal delete Customer
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   const showModalDelete = () => {
     setModalDeleteOpen(true);
+    console.log(menuItems)
   };
   const handleCancelDelete = () => {
     setModalDeleteOpen(false);
   };
+ 
   const handleDeleteCust = () => {
-    dispatch(cartActions.deleteCustomer());
-    message.success("Customer Deleted");
-    setModalDeleteOpen(false);
-    setTimeout(() => {
-      dispatch(cartActions.toggleDrawer(false));
-    }, 800)
+    if (!menuItems.length == 0) {
+      message.error("Please Delete Menu First")
+    } else {
+      dispatch(cartActions.deleteCustomer());
+      message.success("Customer Deleted");
+      setModalDeleteOpen(false);
+      setTimeout(() => {
+        dispatch(cartActions.toggleDrawer(false));
+      }, 800)
+    }
   }
 
   //modal logout
@@ -77,7 +84,7 @@ export default function Navbar() {
     })
     const { idResto, idMenu, stock } = menuPending;
     if (stock > 0) {
-      dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock-1 }));
+      dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
     }
     dispatch(menuActions.updateStock(idResto, idMenu, stock));
     dispatch(cartActions.toggleDrawer(false));
