@@ -33,7 +33,7 @@ export default function Navbar() {
   const handleCancelDelete = () => {
     setModalDeleteOpen(false);
   };
- 
+
   const handleDeleteCust = () => {
     if (!menuItems.length == 0) {
       message.error("Please Delete Menu First")
@@ -68,9 +68,14 @@ export default function Navbar() {
   const handleDrawerOpen = () => {
     dispatch(cartActions.toggleDrawer(false));
   }
+  
   const handleDrawerClose = () => {
+    if (isCustEmpty && menuPending !== null) {
+      dispatch(cartActions.deleteCustomer());
+    }
     dispatch(cartActions.toggleDrawer(true));
   }
+
   const [customerData, setCustomerData] = useState({
     customer: "",
     meja: 0
