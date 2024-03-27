@@ -61,25 +61,6 @@ const RestoMenuPage = () => {
     });
   };
 
-  // const handleAddMenu = (values) => {
-  //   const idMenu = uuidv4(); // Generate a UUID for idMenu
-  //   dispatch(menuActions.addMenu({
-  //     idResto: id,
-  //     idMenu: idMenu,
-  //     menu: {
-  //       id: idMenu,
-  //       name: values.name,
-  //       description: values.description,
-  //       imageUrl: values.imageUrl,
-  //       price: Number(values.price),
-  //       stock: Number(values.stock)
-  //     }
-
-  //   }));
-  //   message.success("successfully added menu");
-  //   setIsAddMenuOpen(false);
-  // };
-
   return (
     <>
       <div className='flex justify-between items-start'>
@@ -121,7 +102,6 @@ const RestoMenuPage = () => {
       >
         <Form className='m-2 mt-5'
           name="basic"
-          // onFinish={handleAddMenu}
           onFinish={onFinish}
           autoComplete="off"
           layout='vertical'
@@ -135,7 +115,7 @@ const RestoMenuPage = () => {
               { min: 3, message: 'Name must be at least 3 characters!' }
             ]}
           >
-            <Input onChange={onChange} value={menuData.name} />
+            <Input onChange={onChange} value={menuData.name} placeholder='eg. Ayam Bakar'/>
           </Form.Item>
           <Form.Item
             label="Description"
@@ -145,7 +125,7 @@ const RestoMenuPage = () => {
               { min: 3, message: 'Description must be at least 3 characters!' }
             ]}
           >
-            <Input onChange={onChange} value={menuData.description} />
+            <Input onChange={onChange} value={menuData.description} placeholder='eg. Ayam Bakar' />
           </Form.Item>
           <Form.Item
             label="Image URL"
@@ -155,7 +135,7 @@ const RestoMenuPage = () => {
               { type: 'url', message: 'Please enter a valid image URL' }
             ]}
           >
-            <Input onChange={onChange} value={menuData.imageUrl} />
+            <Input onChange={onChange} value={menuData.imageUrl} placeholder='eg. https://example.com' />
           </Form.Item>
           <Form.Item
             label="Price"
@@ -164,7 +144,7 @@ const RestoMenuPage = () => {
               { required: true, message: 'Price is required!' },
             ]}
           >
-            <Input onChange={onChange} value={menuData.price} type='number' />
+            <Input onChange={onChange} value={menuData.price} type='number' placeholder='eg. 10000' />
           </Form.Item>
           <Form.Item
             label="Stock"
@@ -173,7 +153,7 @@ const RestoMenuPage = () => {
               { required: true, message: 'Stock is required!' },
             ]}
           >
-            <Input onChange={onChange} value={menuData.stock} type='number' />
+            <Input onChange={onChange} value={menuData.stock} type='number' placeholder='eg. 100'/>
           </Form.Item>
           <Form.Item
             wrapperCol={{ span: 20, offset: 19 }}
