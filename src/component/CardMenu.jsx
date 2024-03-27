@@ -18,7 +18,7 @@ import { formatRupiah } from '../util/format';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuActions } from '../redux/menu';
 import { cartActions } from '../redux/cart.js'
-import { deleteMenuFromResto, editMenuInResto } from '../service/menuService.js';
+import { deleteMenuFromResto, editMenuInResto, updateStock } from '../service/menuService.js';
 
 
 const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) => {
@@ -36,7 +36,7 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
         dispatch(cartActions.toggleDrawer(false));
         dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
       } else {
-        dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
+        dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock: stock - 1 }));
         dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
         message.success("item added");
       }
@@ -135,7 +135,7 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
               }
             />
             <div className='flex justify-between items-end'>
-              <h1 className='font-bold'>Stok : {stock}</h1>
+              <h1 className='font-bold'>Stock : {stock}</h1>
               <h1 className='font-bold text-sm text-primary'>{formatRupiah(price)}</h1>
             </div>
             <ButtonBasic title={"add to cart"} onClick={addToCartHandler} textColor={'primary'} color={'secondary'} />
