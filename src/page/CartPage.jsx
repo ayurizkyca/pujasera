@@ -13,7 +13,7 @@ import { formatRupiah } from '../util/format';
 const CartPage = () => {
   const total = useSelector((state) => state.cart.total)
   const customer = useSelector((state) => state.cart.customer)
-  const table = useSelector((state) => state.cart.table);
+  const table = useSelector((state) => state.cart.meja);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCheckout = () => {
