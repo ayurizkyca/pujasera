@@ -19,8 +19,10 @@ const menuSlice = createSlice({
       const restoIndex = state.resto.findIndex(resto => resto.id === idResto);
       console.log("id resto update redux", restoIndex)
       if (restoIndex !== -1) {
+        console.log("cek index")
         const menuIndex = state.resto[restoIndex].menus.findIndex(menu => menu.id === idMenu);
         if (menuIndex !== -1) {
+          console.log("update stock")
           state.resto[restoIndex].menus[menuIndex].stock = stock;
         }
       }

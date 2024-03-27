@@ -25,7 +25,6 @@ const cartSlice = createSlice({
         if (existingRestoIndex !== -1) {
           const existingResto = state.menuItem[existingRestoIndex];
           const existingMenuIndex = existingResto.menu.findIndex(menu => menu.idMenu === idMenu);
-
           if (existingMenuIndex !== -1) {
             existingResto.menu[existingMenuIndex].qty += qty;
             existingResto.menu[existingMenuIndex].stock -= qty;
@@ -39,7 +38,6 @@ const cartSlice = createSlice({
             namaResto,
             menu: [{ idMenu, namaMenu, harga, qty, stock: stock - 1 }],
             subtotal: harga * qty
-
           };
           state.menuItem.push(newResto);
         }

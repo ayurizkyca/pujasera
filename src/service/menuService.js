@@ -10,23 +10,6 @@ export const deleteMenuFromResto = (restaurant, { restoId, menuId }) => {
     });
 };
 
-// export const editMenuInResto = (restaurant, {restoId, menuId, menu}) => {
-//     return restaurant.map((resto) => {
-//         if (resto.id === restoId) {
-//             return {
-//                 ...resto,
-//                 menus: resto.menus.map((menu) => {
-//                     if (menu.id === menuId) {
-//                         return menu;
-//                     }
-//                     return menu;
-//                 }),
-//             };
-//         }
-//         return resto;
-//     });
-// };
-
 export const editMenuInResto = (restaurant, { restoId, menuId, menu }) => {
     return restaurant.map((resto) => {
         if (resto.id === restoId) {
