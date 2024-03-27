@@ -68,6 +68,8 @@ export default function Navbar() {
     customer: "",
     meja: 0
   });
+
+  //submit form customer data
   const onFinish = (values) => {
     dispatch(cartActions.addCustomer(values));
     setTimeout(() => {
@@ -75,13 +77,14 @@ export default function Navbar() {
     })
     const { idResto, idMenu, stock } = menuPending;
     if (stock > 0) {
-      dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock - 1 }));
+      dispatch(menuActions.updateStock({ idResto, idMenu: idMenu, stock: stock-1 }));
     }
-    dispatch(menuActions.updateStock(idResto, idMenu, stock - 1));
-    dispatch(cartActions.toggleDrawer(true));
+    dispatch(menuActions.updateStock(idResto, idMenu, stock));
+    dispatch(cartActions.toggleDrawer(false));
   };
 
 
+  //input form custumer data
   const onChange = (event) => {
     setCustomerData({
       ...customerData,
@@ -89,10 +92,14 @@ export default function Navbar() {
     });
   };
 
+  //navigate to cart page
   const showCart = () => {
     navigate(ROUTES.CART);
   }
+  //show username in navbar
   const username = useSelector((state) => state.auth.username);
+
+  //count qty items for cart badge
   const cartItemCount = useSelector((state) => {
     return state.cart.menuItem.reduce((acc, resto) => {
       return acc + resto.menu.reduce((acc, item) => acc + item.qty, 0);
