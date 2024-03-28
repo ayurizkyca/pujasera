@@ -6,12 +6,12 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 
-const ListMenuCart = ({ namaMenu, harga, qty, subTotal, incrementClick, decrementClick, deleteItemClick }) => {
-  
+const ListMenuCart = ({ stock, namaMenu, harga, qty, subTotal, incrementClick, decrementClick, deleteItemClick }) => {
 
   return (
     <div className='grid grid-cols-2'>
       <h2 className=''>{namaMenu}</h2>
+      <h1>Stock : {stock}</h1>
       <div className='grid grid-cols-4 items-center'>
         <h2 className=''>{formatRupiah(harga)}</h2>
         <div className='flex gap-2'>

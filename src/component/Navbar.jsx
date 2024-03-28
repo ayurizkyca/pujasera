@@ -209,7 +209,7 @@ export default function Navbar() {
         okType='danger'
         footer={false}
       >
-        <p>Are you sure to delete customer?<br /> It will be delete your shopping cart list</p>
+        <p>Are you sure to delete customer?</p>
         <div className='flex gap-1 justify-end'>
           <ButtonBasic title={"No"} textColor={"primary"} color={"secondary"} fontWeight={"semibold"} onClick={handleCancelDelete} />
           <ButtonBasic title={"Yes"} onClick={handleDeleteCust} textColor={"white"} color={"primary"} fontWeight={"semibold"} />

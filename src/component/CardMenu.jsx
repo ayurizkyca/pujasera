@@ -29,6 +29,8 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch()
+  const menuItems = useSelector((state) => state.cart.menuItem);
+
   // Add to Cart
   const addToCartHandler = () => {
     if (stock > 0) {
@@ -47,7 +49,11 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
 
   // Delete Menu
   const showDeleteConfirm = () => {
-    setIsModalDeleteOpen(true);
+    if (menuItems.length === 0) {
+      setIsModalDeleteOpen(true);
+    } else {
+      message.error("Complete your order first");
+    }
   };
 
   const handleOkDelete = () => {
@@ -63,14 +69,19 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
 
   // Edit Menu
   const showModalEdit = () => {
-    form.setFieldsValue({
-      name: name,
-      description: description,
-      imageUrl: imageUrl,
-      price: price,
-      stock: stock
-    });
-    setIsModalEditOpen(true);
+    if (menuItems.length === 0) {
+      form.setFieldsValue({
+        name: name,
+        description: description,
+        imageUrl: imageUrl,
+        price: price,
+        stock: stock
+      });
+      setIsModalEditOpen(true);
+    } else {
+      message.error("Complete your order first");
+    }
+
   };
 
   const handleCancelEdit = () => {
