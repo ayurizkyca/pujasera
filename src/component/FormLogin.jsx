@@ -26,7 +26,6 @@ const Auth = () => {
       setTimeout(() => {
         navigate(ROUTES.PORTAL_RESTO);
       }, 500)
-
     } else {
       message.error("Invalid Username or Password");
     }

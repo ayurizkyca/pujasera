@@ -108,6 +108,7 @@ const cartSlice = createSlice({
 
     incrementQuantity(state, action) {
       const { idResto, idMenu } = action.payload;
+      console.log("masuk redux")
       const resto = state.menuItem.find(resto => resto.idResto === idResto);
       if (resto) {
         const menuItem = resto.menu.find(item => item.idMenu === idMenu);

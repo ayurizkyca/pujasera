@@ -114,7 +114,7 @@ return (
                 qty={menu.qty}
                 stock={menu.stock}
                 subTotal={menu.qty * menu.harga}
-                incrementClick={() => incrementQuantity(resto.idResto, menu.idMenu, menu.stock)}
+                // incrementClick={() => incrementQuantity(resto.idResto, menu.idMenu, menu.stock)}
                 decrementClick={() => decrementQuantity(resto.idResto, menu.idMenu, menu.stock, menu.qty)}
                 deleteItemClick={() => deleteItem(resto.idResto, menu.idMenu, menu.qty, menu.stock)}
               />

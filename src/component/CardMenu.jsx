@@ -37,10 +37,12 @@ const CardMenu = ({ id, idResto, name, description, imageUrl, price, stock }) =>
       if (isCustEmpty === true) {
         dispatch(cartActions.toggleDrawer(false));
         dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock }));
+        console.log("id resto", idResto)
       } else {
         dispatch(cartActions.addMenuItem({ idResto, namaResto: resto.title, idMenu: id, namaMenu: name, harga: price, qty: 1, stock: stock - 1 }));
         dispatch(menuActions.updateStock({ idResto, idMenu: id, stock: stock - 1 }));
         message.success("item added");
+        console.log("id resto", idResto)
       }
     } else {
       message.error("item out of stock");
